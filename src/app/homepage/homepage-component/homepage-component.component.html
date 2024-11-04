@@ -1,0 +1,61 @@
+<div class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <mat-toolbar color="primary" class="header">
+      <div class="toolbar-content">
+        <mat-icon>loop</mat-icon>
+        <h1>TaskLoop</h1>
+        <div class="actions">
+          <button mat-raised-button color="accent" (click)="navigateTo('/ManagerRegistration')">Register</button>
+          <button mat-raised-button color="accent" (click)="navigateTo('/login')">Login</button>
+        </div>
+      </div>
+    </mat-toolbar>
+  
+    <!-- Main Content -->
+    <main class="main-content">
+      <section class="intro-section mat-elevation-z3">
+        <div class="content">
+          <div class="text">
+            <h2>Enhance Your Workflow with TaskLoop</h2>
+            <p>
+              Welcome to TaskLoop – the innovative solution that fosters a continuous feedback loop in task management. With TaskLoop, streamline communication, gain clarity on task requirements, and keep <br> every project moving forward with real-time insights and feedback.
+            </p>
+            <p>
+              From task tracking to powerful analytics, TaskLoop ensures alignment and productivity, helping you achieve milestones seamlessly. Join us in transforming project management from a linear process <br> 
+              into a dynamic, iterative loop.
+            </p>
+          </div>
+          <img src="assets/pic1.jpg" alt="Project management illustration" class="intro-image"/>
+        </div>
+      </section>
+  
+      <!-- Features Section -->
+      <section class="features-section mat-elevation-z3">
+        <div class="features-content">
+          <img src="assets/pic2.jpg" alt="TaskLoop" class="feature-image"/>
+          <div class="features-text">
+            <h3>Discover What TaskLoop Can Do for You</h3>
+            <p>
+              With TaskLoop, experience task management that evolves with your needs. Track progress, receive and provide feedback instantly, and collaborate effortlessly to keep every team member on the same page. Our intuitive platform helps eliminate misunderstandings, improve task quality, and fosters a culture of continuous improvement.
+            </p>
+            <button mat-raised-button color="primary" (click)="navigateTo('/ManagerRegistration')">
+              Join TaskLoop Today
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <p>&copy; 2024 TaskLoop. All rights reserved.</p>
+        <div class="footer-links">
+          <a routerLink="/privacy-policy">Privacy Policy</a>
+          <a routerLink="/terms-of-service">Terms of Service</a>
+          <a routerLink="/contact-us">Contact Us</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
