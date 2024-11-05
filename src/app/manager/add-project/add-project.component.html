@@ -1,0 +1,28 @@
+<div class="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50">
+    <div class="bg-white p-6 rounded-lg w-96">
+      <h3 class="text-lg font-bold mb-4">Add New Project</h3>
+      <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+        <div class="mb-4">
+          <label class="block text-sm font-medium">Project Name</label>
+          <input type="text" formControlName="projectName" class="mt-1 p-2 border rounded w-full" />
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium">Start Date</label>
+          <input type="date" formControlName="startDate" class="mt-1 p-2 border rounded w-full" />
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium">End Date</label>
+          <input type="date" formControlName="endDate" class="mt-1 p-2 border rounded w-full" />
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium">Project Description</label>
+          <textarea formControlName="projectDescription" class="mt-1 p-2 border rounded w-full"></textarea>
+        </div>
+        <div class="flex justify-end">
+          <button type="button" class="mr-2 bg-gray-400 text-white px-4 py-2 rounded" (click)="onClose()">Cancel</button>
+          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded" [disabled]="projectForm.invalid">Add Project</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

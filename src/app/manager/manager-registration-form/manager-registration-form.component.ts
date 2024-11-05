@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';  
+import { response } from 'express';
 import { ManagerService } from '../../services/manager.service';
 
 @Component({
@@ -40,14 +41,15 @@ export class ManagerRegistrationFormComponent {
     console.log(formData)
 
     this.managerService.registerManager(formData)
-      .subscribe({
+      .subscribe({       
         next: (response) => {
+          const managerid=response.managerId;
           this.snackBar.open('Registration successful', 'Close', {
             duration: 3000,
             horizontalPosition: 'right',
             verticalPosition: 'top',
           });
-          this.router.navigate(['/login']);
+          this.router.navigate(['/dashboard',managerid]);
         },
         error: (error) => {
           if (error.status === 409) {

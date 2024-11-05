@@ -9,11 +9,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { FormsModule } from '@angular/forms'; 
 
 import { ManagerRegistrationFormComponent } from './manager-registration-form/manager-registration-form.component';
+import { ManagerdashboardComponent } from './managerdashboard/managerdashboard.component';
+import { AddProjectComponent } from './add-project/add-project.component';
 
 @NgModule({
-  declarations: [ManagerRegistrationFormComponent],
+  declarations: [ManagerRegistrationFormComponent,ManagerdashboardComponent, AddProjectComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -24,6 +27,7 @@ import { ManagerRegistrationFormComponent } from './manager-registration-form/ma
     MatFormFieldModule,
     MatInputModule,
     MatGridListModule,
+    FormsModule
   ],
   exports: [ManagerRegistrationFormComponent], 
 })
