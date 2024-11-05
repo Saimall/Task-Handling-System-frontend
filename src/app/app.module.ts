@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient } from '@angular/common/http';
 import { HomepageModule } from './homepage/homepage.module';
-
+import { ManagerModule } from './manager/manager.module';
 
 @NgModule({
   declarations: [
@@ -15,7 +15,8 @@ import { HomepageModule } from './homepage/homepage.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HomepageModule
+    HomepageModule,
+    ManagerModule
   ],
   providers: [
     provideClientHydration(),

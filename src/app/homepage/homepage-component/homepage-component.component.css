@@ -115,33 +115,34 @@
     line-height: 1.6;
 }
 
-/*Footer section */
-.footer {
-    background-color: #333;
-    color: #fff;
-    padding: 1rem;
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-}
 
-.footer-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-}
 
-.footer-links a {
-    color: #fff;
-    margin-left: 1rem;
-    text-decoration: none;
-    transition: color 0.3s ease, transform 0.3s ease;
-}
-
-.footer-links a:hover {
-    color: #ffd700;
-    transform: scale(1.1);
-}
+    .footer {
+        background-color: #333; /* Light background for the footer */
+        color: #fff;
+        padding: 20px; /* Add some padding */
+        display: flex; /* Use flexbox for layout */
+        justify-content: space-between; /* Space between left and right content */
+        align-items: center; /* Center items vertically */
+    }
+    
+    .footer-content {
+        display: flex; /* Use flexbox for footer content */
+        justify-content: space-between; /* Space between p and links */
+        width: 100%; /* Make it take full width */
+    }
+    
+    .footer-links a {
+        margin-left: 15px; /* Space between links */
+        text-decoration: none; /* Remove underline from links */
+        color: #fff; /* Link color */
+        cursor: pointer; /* Change cursor to pointer */
+    }
+    
+    .footer-links a:hover {
+        text-decoration: underline; /* Underline on hover */
+    }
+    
 
 @media screen and (max-width: 768px) {
     .main-content {

@@ -1,0 +1,55 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-800">
+    <div class="w-full max-w-9xl bg-white shadow-lg rounded-lg border border-gray-600 ">
+        <header class="bg-gray-900 shadow-lg rounded-t-lg">
+            <div class="px-10 py-4 flex justify-between items-center">
+                <h1 class="text-5xl font-title font-bold text-white shadow-lg">TaskFlow</h1>
+                <div class="flex space-x-4">
+                    <button class="bg-gold-500 text-black py-2 px-5 rounded-full hover:bg-gold-400 hover:shadow-lg transition duration-200" (click)="router.navigate(['/Login'])">Login</button>
+                    <button class="bg-white text-gray-800 border border-gray-600 py-2 px-5 rounded-full hover:bg-gray-200 hover:shadow-md transition duration-200" (click)="router.navigate([''])">Go Back</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-grow flex flex-col items-center p-4">
+            <div class="mb-4 w-full max-w-xl">
+                <img
+                    src="https://tools-api.webcrumbs.org/image-placeholder/600/300/task management/1"
+                    alt="TaskFlow Management"
+                    class="rounded-lg shadow-lg object-cover w-full h-[200px]"
+                />
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-5xl">
+                <h2 class="text-3xl font-title font-semibold text-center mb-6 text-gold-600">Register as Manager</h2>
+                <form [formGroup]="registrationForm" (ngSubmit)="handleSubmit()" class="grid grid-cols-2 gap-6">
+                    <div class="col-span-1">
+                        <input formControlName="name" class="input-field border-2 border-gray-600 rounded-md p-3 w-full focus:outline-none focus:ring focus:ring-gold-500" placeholder="Enter your name" required />
+                        <div *ngIf="registrationForm.get('name')?.invalid && registrationForm.get('name')?.touched" class="error-message text-red-500">Name is required.</div>
+                    </div>
+
+                    <div class="col-span-1">
+                        <input formControlName="contact" class="input-field border-2 border-gray-600 rounded-md p-3 w-full focus:outline-none focus:ring focus:ring-gold-500" placeholder="Enter your contact number" type="tel" required />
+                        <div *ngIf="registrationForm.get('contact')?.invalid && registrationForm.get('contact')?.touched" class="error-message text-red-500">Contact No must be exactly 10 digits.</div>
+                    </div>
+
+                    <div class="col-span-1">
+                        <input formControlName="email" class="input-field border-2 border-gray-600 rounded-md p-3 w-full focus:outline-none focus:ring focus:ring-gold-500" placeholder="Enter your email" type="email" required />
+                        <div *ngIf="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched" class="error-message text-red-500">Please enter a valid email address.</div>
+                    </div>
+
+                    <div class="col-span-1">
+                        <input formControlName="password" class="input-field border-2 border-gray-600 rounded-md p-3 w-full focus:outline-none focus:ring focus:ring-gold-500" placeholder="Enter your password" type="password" required minlength="6" />
+                        <div *ngIf="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched" class="error-message text-red-500">Password must be at least 6 characters long.</div>
+                    </div>
+
+                    <div class="col-span-2 text-center mt-4">
+                        <button class="bg-gold-600 text-black py-3 px-8 rounded-full hover:bg-gold-500 hover:scale-105 transition duration-200 shadow-lg" type="submit">Submit</button>
+                    </div>
+                </form>
+                <div class="text-center mt-4">
+                    <a routerLink="/Login" class="text-gold-600 hover:underline">Already have an account? Login</a>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
