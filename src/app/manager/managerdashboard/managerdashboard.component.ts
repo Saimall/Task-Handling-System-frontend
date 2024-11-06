@@ -6,8 +6,9 @@ import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend }
 import { ManagerService } from '../../services/managerservice/manager.service';
 import {ProjectService} from '../../services/projectservice/project.service'
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+import { AuthService } from '../../services/authenticationservice/authenticationservice.service';
+import { EmployeeserviceService } from '../../services/employeeservice/employeeservice.service';
+// Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 
 @Component({
@@ -25,13 +26,18 @@ export class ManagerdashboardComponent implements OnInit {
   showPopup: boolean = false;
   scrollToProjects: boolean = false;
   managerId:any=null;
+  employeeData:any[]=[];
+
+  showAddEmployeePopup: boolean = false;
 
   constructor(
     private router: Router,
     private route:ActivatedRoute,
     private managerService: ManagerService,
     private projectservice:ProjectService,
-    private snackbar:MatSnackBar
+    private snackbar:MatSnackBar,
+    private authservice:AuthService,
+    private employeeService: EmployeeserviceService
   ) {}
  
 
@@ -41,7 +47,45 @@ export class ManagerdashboardComponent implements OnInit {
     });
     this.loadManagerDetails();
     this.loadProjects();
+    this.loadEmployee();
   }
+
+  openAddEmployeePopup() {
+    this.showAddEmployeePopup = true;
+  }
+
+  closeEmployeePopup() {
+    this.showAddEmployeePopup = false;
+  }
+
+
+  onAddEmployee(employee: any) {
+    this.employeeService.addEmployee(employee,this.managerId).subscribe({
+      next:() => {
+        this.closeEmployeePopup();
+        this.loadEmployee();
+        this.snackbar.open('Employee Added Successfully', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        })
+       
+        
+      },
+      error: () => {
+        console.error('Error adding employee:');
+        this.snackbar.open('Error while adding the Employee', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        })
+      }
+    });
+  }
+
+
+
+
 
 
   handleAddProject(newProject: any) {
@@ -63,6 +107,29 @@ export class ManagerdashboardComponent implements OnInit {
     });
   }
 
+
+  handleDeleteProject(projectid: any) {
+    this.projectservice.deleteProject(projectid).subscribe({
+      next: () => {  
+        this.loadProjects();
+        this.snackbar.open('Project Deleted Successfully', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+        
+       
+      },
+      error: (error) => {
+        console.error('Error deleting project:', error);
+       
+      }
+    });
+  }
+
+
+
+
   loadManagerDetails() {
     this.managerService.getManagerDetails(this.managerId).subscribe({
       next: (data) => {
@@ -71,6 +138,23 @@ export class ManagerdashboardComponent implements OnInit {
       error: (error) => console.error('Error fetching manager details:', error)
     });
   }
+
+  loadEmployee() {
+    this.employeeService.getEmployee(this.managerId).subscribe({
+      next: (data) => {
+        console.log(data);
+        this.employeeData = data;
+        if (this.employeeData.length > 0) {
+          // this.selectedProject = this.projectData[0];
+          // this.loadTasks(this.selectedProject.projectId);
+        }
+      },
+      error: (error) => console.error('Error fetching projects:', error)
+    });
+  }
+
+
+
   
   loadProjects() {
     this.projectservice.getProjects(this.managerId).subscribe({
@@ -144,9 +228,13 @@ export class ManagerdashboardComponent implements OnInit {
   }
 
   handleLogout() {
-    localStorage.removeItem('jwtToken');
-    localStorage.removeItem('userId');
-    this.router.navigate(['/HomePage']);
+    this.authservice.removeToken()
+    this.router.navigate(['']);
+    this.snackbar.open('Logout Successfully', 'Close', {
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+    });
   }
 
   togglePopup() {

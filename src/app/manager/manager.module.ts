@@ -15,8 +15,9 @@ import { ManagerRegistrationFormComponent } from './manager-registration-form/ma
 import { ManagerdashboardComponent } from './managerdashboard/managerdashboard.component';
 import { AddProjectComponent } from './add-project/add-project.component';
 import { AppRoutingModule } from '../app-routing.module';
+import { AddEmployeeComponent } from './add-employee/add-employee.component';
 @NgModule({
-  declarations: [ManagerRegistrationFormComponent,ManagerdashboardComponent, AddProjectComponent],
+  declarations: [ManagerRegistrationFormComponent,ManagerdashboardComponent, AddProjectComponent, AddEmployeeComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,

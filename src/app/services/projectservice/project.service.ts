@@ -8,6 +8,7 @@ import { AuthService } from '../authenticationservice/authenticationservice.serv
   providedIn: 'root'
 })
 export class ProjectService {
+ 
 
   constructor(private http: HttpClient,private authservice:AuthService ){}
 
@@ -21,5 +22,10 @@ export class ProjectService {
 
   addProject(projectData: Project,managerId:string): Observable<Project> {
     return this.http.post<Project>(`${this.apiUrl1}/addProject/${managerId}`, projectData,{headers:this.authservice.getHeaders()});
+  }
+
+
+  deleteProject(projectid:any): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl1}/deleteProjects/${projectid}`,{headers:this.authservice.getHeaders()});
   }
 }

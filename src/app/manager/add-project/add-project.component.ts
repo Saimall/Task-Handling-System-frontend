@@ -20,7 +20,7 @@ export class AddProjectComponent implements OnInit {
   projectForm: FormGroup;
   managerId: any="";
 
-  constructor(private fb: FormBuilder,private route:ActivatedRoute,private projectservice:ProjectService) {
+  constructor(private fb: FormBuilder) {
     this.projectForm = this.fb.group({
       projectName: ['', Validators.required],
       startDate: ['', Validators.required],
