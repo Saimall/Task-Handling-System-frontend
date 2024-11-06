@@ -1,3 +1,4 @@
+import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 
@@ -5,7 +6,18 @@ import { jwtDecode } from 'jwt-decode';
   providedIn: 'root'
 })
 export class AuthService {
-  private tokenKey = 'auth';
+
+ getHeaders(): HttpHeaders {
+    const token = this.getToken();
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+  }
+
+
+
+  private tokenKey = 'token';
   
   setToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);

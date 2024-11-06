@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/authenticationservice/authenticationservice.service';
 
 import { UserserviceService } from '../../services/userservice/userservice.service';
 
@@ -13,7 +14,7 @@ export class LogincomponentComponent {
 
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder,private userservice:UserserviceService,private router:Router,private snackbar:MatSnackBar) {
+  constructor(private fb: FormBuilder,private userservice:UserserviceService,private router:Router,private snackbar:MatSnackBar,private authservice:AuthService) {
     // Initialize the form group with form controls
     this.loginForm = this.fb.group({
       email: ['', Validators.required],
@@ -31,7 +32,7 @@ export class LogincomponentComponent {
         next: (response) => {
           console.log("Login response",response);
           if (response.token) {
-            localStorage.setItem('token', response.token);
+            this.authservice.setToken(response.token);
             this.snackbar.open('User validated successfully!', 'Close', {
               duration: 3000,
               horizontalPosition: 'right',
@@ -54,7 +55,6 @@ export class LogincomponentComponent {
             verticalPosition: 'top',
             
           });
-
         }
       });   
     } else {

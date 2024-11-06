@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Manager } from '../../models/manager';
 import { Project } from '../../models/project';
 import { Task } from '../../models/Task';
+import { AuthService } from '../authenticationservice/authenticationservice.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class ManagerService {
 
 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private authservice:AuthService) {}
 
   registerManager(managerData: Manager): Observable<Manager> {
     console.log(managerData)
@@ -29,7 +30,7 @@ export class ManagerService {
 
   
   getManagerDetails(managerId: string): Observable<Manager> {
-    return this.http.get<Manager>(`${this.apiUrl}/viewManagerDetails/${managerId}`);
+    return this.http.get<Manager>(`${this.apiUrl}/viewManagerDetails/${managerId}`,{headers:this.authservice.getHeaders()});
   }
 
 
