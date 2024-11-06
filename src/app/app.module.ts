@@ -7,7 +7,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideHttpClient } from '@angular/common/http';
 import { HomepageModule } from './homepage/homepage.module';
 import { ManagerModule } from './manager/manager.module';
-
+import { UserModule } from './user/user.module';
 @NgModule({
   declarations: [
     AppComponent
@@ -16,7 +16,8 @@ import { ManagerModule } from './manager/manager.module';
     BrowserModule,
     AppRoutingModule,
     HomepageModule,
-    ManagerModule
+    ManagerModule,
+    UserModule
   ],
   providers: [
     provideClientHydration(),

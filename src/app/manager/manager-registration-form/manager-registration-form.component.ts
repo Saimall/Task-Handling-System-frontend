@@ -3,8 +3,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';  
-import { response } from 'express';
-import { ManagerService } from '../../services/manager.service';
+
+import { ManagerService } from '../../services/managerservice/manager.service';
 
 @Component({
   selector: 'app-manager-registration-form',

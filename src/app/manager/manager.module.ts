@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { ManagerRegistrationFormComponent } from './manager-registration-form/manager-registration-form.component';
 import { ManagerdashboardComponent } from './managerdashboard/managerdashboard.component';
 import { AddProjectComponent } from './add-project/add-project.component';
-
+import { AppRoutingModule } from '../app-routing.module';
 @NgModule({
   declarations: [ManagerRegistrationFormComponent,ManagerdashboardComponent, AddProjectComponent],
   imports: [
@@ -27,7 +27,8 @@ import { AddProjectComponent } from './add-project/add-project.component';
     MatFormFieldModule,
     MatInputModule,
     MatGridListModule,
-    FormsModule
+    FormsModule,
+    AppRoutingModule
   ],
   exports: [ManagerRegistrationFormComponent], 
 })

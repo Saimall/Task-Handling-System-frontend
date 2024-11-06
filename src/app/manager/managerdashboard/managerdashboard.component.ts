@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import { ManagerService } from '../../services/manager.service';
-import {ProjectService} from '../../services/project.service'
+import { ManagerService } from '../../services/managerservice/manager.service';
+import {ProjectService} from '../../services/projectservice/project.service'
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
