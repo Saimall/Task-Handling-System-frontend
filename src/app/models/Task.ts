@@ -1,25 +1,29 @@
-enum Priority {
-    HIGH = 'HIGH',
-    MEDIUM = 'MEDIUM',
-    LOW = 'LOW'
-}
+//  export enum Priority {
+//     HIGH = 'HIGH',
+//     MEDIUM = 'MEDIUM',
+//     LOW = 'LOW'
+// }
 
-enum Status {
-    PENDING = 'PENDING',
-    IN_PROGRESS = 'IN_PROGRESS',
-    COMPLETED = 'COMPLETED'
-}
+// export enum Status {
+//     PENDING = 'PENDING',
+//     IN_PROGRESS = 'IN_PROGRESS',
+//     COMPLETED = 'COMPLETED'
+// }
 
 
 export interface Task{
-    taskId: number;                     
-    taskTitle: string;
-    taskDescription: string;
-    dueDateTime: string;                 
-    priority: Priority;                 
-    status: Status;                     
-    employeeId: number;                  
-    createdAt: string;                   
-    updatedAt: string;                  
+
+
+    taskId: string;
+  taskTitle: string;
+  status: 'Completed' | 'In Progress' | 'Not Started';  // assuming these statuses
+  assignedTo?: string; // optional if it can be unassigned
+  dueDate: string;
+  priority: 'LOW' | 'MEDIUM' | 'HIGH';
+  empId?: number;
+            
+    employeeId?: string;                  
+    createdAt?: string;                   
+    updatedAt?: string;                  
     completedAt?: string;  
 }

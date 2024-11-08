@@ -10,6 +10,9 @@ import { AuthService } from '../authenticationservice/authenticationservice.serv
   providedIn: 'root'
 })
 export class ManagerService {
+  deleteEmployee(employeeid: any) {
+    throw new Error('Method not implemented.');
+  }
  
 
  

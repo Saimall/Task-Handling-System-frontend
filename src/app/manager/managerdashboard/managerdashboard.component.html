@@ -87,13 +87,13 @@
                 >
                   Delete
                 </button>
-                 <!--
+                 
                 <button
                   class="bg-blue-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-blue-600 transition-colors"
-                  (click)="handleViewProject(project.projectId)" -->
-                <!-- >
-                  View -->
-                <!-- </button>  -->
+                  [routerLink]="['/configure-tasks',managerId, project.projectId]" 
+                >
+                  Manage
+                </button> 
               </td>
             </tr>
           </tbody>
@@ -127,19 +127,18 @@
               <td class="px-4 py-2">{{ employee.contact }}</td>
               <td class="px-4 py-2">{{ employee.designation }}</td>
               <td class="px-4 py-2">
-                <!-- <button
+                <button
                   class="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition-colors"
-                  (click)="handleDeleteProject(employee.empId)"
+                  (click)="handleDeleteEmployee(employee.empId)"
                 >
                   Delete
-                </button> -->
-                 <!--
+                </button>
                 <button
-                  class="bg-blue-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-blue-600 transition-colors"
-                  (click)="handleViewProject(project.projectId)" -->
-                <!-- >
-                  View -->
-                <!-- </button>  -->
+                class="bg-blue-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-blue-600 transition-colors"
+                (click)="openUpdateEmployeePopup(employee)"
+              >
+                Update
+              </button>
               </td>
             </tr>
           </tbody>
@@ -147,8 +146,8 @@
       </div>
   
       <app-add-project *ngIf="showPopup" (close)="togglePopup()" (addProject)="handleAddProject($event)" ></app-add-project>
-     <app-add-employee *ngIf="showAddEmployeePopup" (closePopup)="closeEmployeePopup()"  (addEmployee)="onAddEmployee($event)"  [showPopup]="showAddEmployeePopup" ></app-add-employee>
-   
+     <app-add-employee *ngIf="showAddEmployeePopup" (closePopup)="closeEmployeePopup()"  (addEmployee)="onAddEmployee($event)"   [showPopup]="showAddEmployeePopup"  ></app-add-employee> >
+     <app-add-employee *ngIf="showUpdateEmployeePopup" (closePopup)="closeEmployeePopup()" [employeeData]="employeeToUpdate" (updateEmployee)="onUpdateEmployee($event)" [showPopup]="showUpdateEmployeePopup"> </app-add-employee>
     </main>
   </div>
   

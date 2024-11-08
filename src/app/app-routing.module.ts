@@ -4,13 +4,15 @@ import { AuthGuard } from './auth.guard';
 import { HomepageComponentComponent } from './homepage/homepage-component/homepage-component.component';
 import { ManagerRegistrationFormComponent } from './manager/manager-registration-form/manager-registration-form.component';
 import { ManagerdashboardComponent } from './manager/managerdashboard/managerdashboard.component';
+import { ConfigureTasksComponent } from './tasks/configure-tasks/configure-tasks.component';
 import { LogincomponentComponent } from './user/logincomponent/logincomponent.component';
 
 const routes: Routes = [
   {path:"",component:HomepageComponentComponent},
   {path:"register",component:ManagerRegistrationFormComponent},
   {path:"login",component:LogincomponentComponent},
-  {path:"dashboard/:managerid",component:ManagerdashboardComponent,canActivate:[AuthGuard]}
+  {path:"dashboard/:managerid",component:ManagerdashboardComponent,canActivate:[AuthGuard]},
+  { path: 'configure-tasks/:managerId/:projectId', component: ConfigureTasksComponent },
 ];
 
 @NgModule({

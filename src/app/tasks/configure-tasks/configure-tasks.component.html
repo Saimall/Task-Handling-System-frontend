@@ -1,0 +1,105 @@
+<div class="flex justify-center items-start min-h-screen bg-gray-100 pt-10">
+    <div class="w-[960px] rounded-lg shadow-lg p-6" style=" user-select: none; cursor: default;">
+      <h2 class="text-2xl font-title mb-4">Task Configuration</h2>
+      <div class="flex justify-end   top-6">
+        <button 
+        (click)="openAddTaskModal()" 
+        class="bg-gray-500 text-white hover:bg-gray-700 hover:text-gray-400 rounded-lg py-3 px-6 transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 z-10">
+        Add Task
+      </button>
+      </div>
+      <table class="min-w-full text-left relative z-10">
+        <thead>
+          <tr class="bg-neutral-100 text-neutral-950 font-semibold">
+            <th class="py-3 px-4">Task ID</th>
+            <th class="py-3 px-4">Task Name</th>
+            <th class="py-3 px-4">Status</th>
+            <th class="py-3 px-4">Assigned Employee</th>
+            <th class="py-3 px-4">Due Date</th>
+            <th class="py-3 px-4">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let task of tasks; let i = index" class="odd:bg-neutral-50 even:bg-neutral-200 text-neutral-950">
+            <td class="py-3 px-4">{{ task.taskId }}</td>
+            <td class="py-3 px-4">{{ task.taskTitle }}</td>
+            <td class="py-3 px-4">
+              <span class="relative inline-flex flex-col items-center">
+                <span class="block w-4 h-4 rounded-full animate-pulse" [ngStyle]="{ background: task.status === 'Completed' ? '#22c55e' : task.status === 'In Progress' ? '#f39c12' : '#ff0000' }"></span>
+                <span class="text-neutral-600 text-xs mt-1">{{ task.status }}</span>
+              </span>
+            </td>
+            <td class="py-3 px-4">{{  task.assignedTo  }}</td>
+            <td class="py-3 px-4">{{ task.dueDate | date: 'shortDate' }}</td>
+            <td class="py-3 px-4 flex items-center">
+              <button (click)="updateTask(task)" class="bg-primary-500 hover:bg-primary-700 text-white rounded-md py-2 px-4 mr-2 transition-all">Update</button>
+              <button (click)="deleteTask(task.taskId)" class="bg-red-500 hover:bg-red-700 text-white rounded-md py-2 px-4 transition-all">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <!-- Add Task Modal -->
+  <div *ngIf="isAddTaskModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div class="bg-white w-[480px] rounded-lg shadow-lg p-6 relative z-60">
+      <h3 class="text-xl font-bold mb-4">Add New Task</h3>
+      <form [formGroup]="taskForm" (ngSubmit)="saveNewTask()">
+        <div class="mb-4">
+          <label class="block font-semibold">Task Name</label>
+          <input type="text" formControlName="taskTitle" class="w-full p-2 border rounded" />
+          <div *ngIf="taskForm.get('taskTitle')?.invalid && taskForm.get('taskTitle')?.touched" class="text-red-500 text-sm">
+            Task Name is required.
+          </div>
+        </div>
+  
+        <div class="mb-4">
+          <label class="block font-semibold">Task Description</label>
+          <textarea formControlName="taskDescription" class="w-full p-2 border rounded"></textarea>
+          <div *ngIf="taskForm.get('taskDescription')?.invalid && taskForm.get('taskDescription')?.touched" class="text-red-500 text-sm">
+            Task Description is required.
+          </div>
+        </div>
+  
+        <div class="mb-4">
+            <label class="block font-semibold">Due Date</label>
+            <input type="date" formControlName="dueDate" class="w-full p-2 border rounded" />
+            <div *ngIf="taskForm.get('dueDate')?.invalid && taskForm.get('dueDate')?.touched" class="text-red-500 text-sm">
+              Due Date is required.
+            </div>
+          </div>
+    
+         
+          <div class="mb-4">
+            <label class="block font-semibold">Due Time</label>
+            <input type="time" formControlName="dueTime" class="w-full p-2 border rounded" />
+            <div *ngIf="taskForm.get('dueTime')?.invalid && taskForm.get('dueTime')?.touched" class="text-red-500 text-sm">
+              Due Time is required.
+            </div>
+          </div>
+  
+        <div class="mb-4">
+          <label class="block font-semibold">Priority</label>
+          <select formControlName="priority" class="w-full p-2 border rounded">
+            <option value="LOW">Low</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="HIGH">High</option>
+          </select>
+        </div>
+  
+        <div class="mb-4">
+          <label class="block font-semibold">Assigned To</label>
+          <select formControlName="employeeId" class="w-full p-2 border rounded">
+            <option *ngFor="let employee of employees" [value]="employee.empId">{{ employee.name }}</option>
+          </select>
+        </div>
+  
+        <div class="flex justify-end">
+          <button type="submit" class="bg-grey-500 hover:bg-grey-700 text-white rounded-md py-2 px-4 mr-2">Save Task</button>
+          <button type="button" (click)="closeAddTaskModal()" class="bg-gray-500 hover:bg-gray-700 text-white rounded-md py-2 px-4">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

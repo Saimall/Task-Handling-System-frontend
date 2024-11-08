@@ -1,32 +1,43 @@
 <div class="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50" *ngIf="showPopup">
-    <div class="bg-white p-6 rounded-lg w-96">
-      <h3 class="text-lg font-bold mb-4">Add New Employee</h3>
-      <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
-        <div class="mb-4">
-          <label class="block text-sm font-medium" for="name">Name</label>
-          <input type="text" id="name"formControlName="name" required class="mt-1 p-2 border rounded w-full" />
-        </div>
-        <div class="mb-4">
-          <label class="block text-sm font-medium" for="email">Email</label>
-          <input type="email" id="email" formControlName="email" required class="mt-1 p-2 border rounded w-full" />
-        </div>
-        <div class="mb-4">
-          <label class="block text-sm font-medium" for="contact">Contact</label>
-          <input type="text" id="contact"formControlName="contact" required class="mt-1 p-2 border rounded w-full" />
-        </div>
-        <div class="mb-4">
-          <label class="block text-sm font-medium" for="designation">Designation</label>
-          <input type="text" id="designation" formControlName="designation" required class="mt-1 p-2 border rounded w-full" />
-        </div>
-        <div class="mb-4">
-          <label class="block text-sm font-medium" for="password">Password</label>
-          <input type="password" id="password" formControlName="password" required class="mt-1 p-2 border rounded w-full" />
-        </div>
-        <div class="flex justify-end">
-          <button type="button" class="mr-2 bg-gray-400 text-white px-4 py-2 rounded" (click)="onCancel()">Cancel</button>
-          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Add Employee</button>
-        </div>
-      </form>
-    </div>
+  <div class="bg-white p-6 rounded-lg w-96">
+   
+    <h3 class="text-lg font-bold mb-4">{{ employeeData ? 'Update Employee' : 'Add New Employee' }}</h3>
+    <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+      
+      <div class="mb-4">
+        <label class="block text-sm font-medium" for="name">Name</label>
+        <input type="text" id="name" formControlName="name" required class="mt-1 p-2 border rounded w-full" />
+      </div>
+      
+      <div class="mb-4" *ngIf="!employeeData">
+        <label class="block text-sm font-medium" for="email">Email</label>
+        <input type="email" id="email" formControlName="email" required class="mt-1 p-2 border rounded w-full" />
+      </div>
+      
+      <div class="mb-4">
+        <label class="block text-sm font-medium" for="contact">Contact</label>
+        <input type="text" id="contact" formControlName="contact" required class="mt-1 p-2 border rounded w-full" />
+      </div>
+      
+      <div class="mb-4">
+        <label class="block text-sm font-medium" for="designation">Designation</label>
+        <input type="text" id="designation" formControlName="designation" required class="mt-1 p-2 border rounded w-full" />
+      </div>
+
+     
+      <div class="mb-4" *ngIf="!employeeData">
+        <label class="block text-sm font-medium" for="password">Password</label>
+        <input type="password" id="password" formControlName="password" required class="mt-1 p-2 border rounded w-full" />
+      </div>
+      
+      <div class="flex justify-end">
+        <button type="button" class="mr-2 bg-gray-400 text-white px-4 py-2 rounded" (click)="onCancel()">Cancel</button>
+        
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+          {{ employeeData ? 'Update Employee' : 'Add Employee' }}
+        </button>
+      </div>
+      
+    </form>
   </div>
-  
+</div>

@@ -8,6 +8,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { HomepageModule } from './homepage/homepage.module';
 import { ManagerModule } from './manager/manager.module';
 import { UserModule } from './user/user.module';
+import { TasksModule } from './tasks/tasks.module';
 @NgModule({
   declarations: [
     AppComponent
@@ -17,7 +18,8 @@ import { UserModule } from './user/user.module';
     AppRoutingModule,
     HomepageModule,
     ManagerModule,
-    UserModule
+    UserModule,
+    TasksModule
   ],
   providers: [
     provideClientHydration(),

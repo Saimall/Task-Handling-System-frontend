@@ -27,9 +27,11 @@ export class ManagerdashboardComponent implements OnInit {
   scrollToProjects: boolean = false;
   managerId:any=null;
   employeeData:any[]=[];
-
+  editMode = false;
+  employeeToUpdate: any; 
   showAddEmployeePopup: boolean = false;
-
+  showUpdateEmployeePopup:boolean=false;
+  employeeid:any
   constructor(
     private router: Router,
     private route:ActivatedRoute,
@@ -50,12 +52,25 @@ export class ManagerdashboardComponent implements OnInit {
     this.loadEmployee();
   }
 
+  
+
   openAddEmployeePopup() {
+    
     this.showAddEmployeePopup = true;
+  }
+
+
+  openUpdateEmployeePopup(employee: any): void {
+    console.log("Employee Data",employee);
+    this.employeeid=employee.empId;
+    this.employeeToUpdate = employee; 
+    this.showUpdateEmployeePopup= true;
+    console.log(this.showUpdateEmployeePopup)
   }
 
   closeEmployeePopup() {
     this.showAddEmployeePopup = false;
+    this.showUpdateEmployeePopup=false;
   }
 
 
@@ -83,6 +98,56 @@ export class ManagerdashboardComponent implements OnInit {
     });
   }
 
+
+  onUpdateEmployee(updatedEmployee: any): void {
+    console.log("EmployeeID",this.employeeid);
+    this.employeeService.updateEmployee(updatedEmployee,this.employeeid).subscribe({
+      next: (response) => {
+        this.snackbar.open('Employee updated successfully!', 'Close', { 
+          duration: 3000, 
+          horizontalPosition: 'right', 
+          verticalPosition: 'top' 
+        });
+        this.loadEmployee();
+        this.closeEmployeePopup();
+      },
+      error: (error) => {
+        this.snackbar.open('Failed to update employee', 'Close', { 
+          duration: 3000, 
+          horizontalPosition: 'right', 
+          verticalPosition: 'top' 
+        });
+      },
+      complete: () => {
+        console.log('Employee update process completed');
+      }
+    });
+  }
+  
+
+  handleDeleteEmployee(employeeid: any) {
+    console.log("ID",employeeid);
+    this.employeeService.deleteEmployee(employeeid).subscribe({
+      next:() => {
+        this.loadEmployee();
+        this.snackbar.open('Employee Deleted Successfully', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        })
+       
+        
+      },
+      error: () => {
+        console.error('Error adding employee:');
+        this.snackbar.open('Error while deleting the Employee', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        })
+      }
+    });
+  }
 
 
 
@@ -133,6 +198,7 @@ export class ManagerdashboardComponent implements OnInit {
   loadManagerDetails() {
     this.managerService.getManagerDetails(this.managerId).subscribe({
       next: (data) => {
+        console.log("Manager data",data)
         this.managerDetails = data;
       },
       error: (error) => console.error('Error fetching manager details:', error)
@@ -162,7 +228,7 @@ export class ManagerdashboardComponent implements OnInit {
         console.log(data);
         this.projectData = data;
         if (this.projectData.length > 0) {
-          this.selectedProject = this.projectData[0];
+          // this.selectedProject = this.projectData[0];
           // this.loadTasks(this.selectedProject.projectId);
         }
       },
