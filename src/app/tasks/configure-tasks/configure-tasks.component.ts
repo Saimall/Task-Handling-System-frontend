@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Task } from '../../models/Task';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from 'express';
 
 @Component({
   selector: 'app-configure-tasks',
@@ -17,7 +18,12 @@ export class ConfigureTasksComponent {
 
   taskForm: FormGroup;
 
- 
+  selectedTask: Task = {
+    taskTitle: '', taskDescription: '', dueDateTime: '', priority: 'LOW', status: 'Not Started',
+    taskId: '',
+    dueDate: ''
+  };
+  isUpdateTaskModalOpen = false;
   
   newTask: any = {taskTitle:'',taskDescription:'' ,dueDateTime:'',priority:'',status:'' };
   isAddTaskModalOpen = false;
@@ -48,6 +54,7 @@ export class ConfigureTasksComponent {
     private employeeservice:EmployeeserviceService,
     private fb: FormBuilder,
     private snackbar:MatSnackBar,
+  
    
   ) {
     this.taskForm = this.fb.group({
@@ -102,6 +109,31 @@ export class ConfigureTasksComponent {
       console.log("Employees in task"+ JSON.stringify(this.employees))
     });
   }
+
+
+  openUpdateTaskModel(task:Task){
+
+    this.selectedTask = task;
+
+    const dueDateTime = task.dueDateTime || '';
+
+    this.taskForm.setValue({
+      taskTitle: task.taskTitle,
+      taskDescription: task.taskDescription,
+      dueDate: dueDateTime.split('T')[0] , 
+      dueTime: dueDateTime.split('T')[1], 
+      priority: task.priority,
+      employeeId: task.employeeId
+    });
+    this.isUpdateTaskModalOpen = true;
+  }
+
+
+  closeUpdateTaskModal() {
+    this.isUpdateTaskModalOpen = false;
+    this.taskForm.reset(); 
+  }
+
 
 
   saveNewTask() {
@@ -159,12 +191,39 @@ export class ConfigureTasksComponent {
 
 
 
-  updateTask(task: any) {
-    
-    console.log('Updating task:', task);
+  updateTaskDetails() {
+    if (this.taskForm.valid) {
+      const updatedTask: Task = {
+        taskTitle: this.taskForm.get('taskTitle')?.value,
+        taskDescription: this.taskForm.get('taskDescription')?.value,
+        priority: this.taskForm.get('priority')?.value,
+        employeeId: this.taskForm.get('employeeId')?.value,
+        dueDateTime: `${this.taskForm.get('dueDate')?.value}T${this.taskForm.get('dueTime')?.value}`,
+        status: this.selectedTask.status,
+        taskId: this.selectedTask.taskId,
+      };
+
+ if(this.selectedTask.taskId!=null){
+  
+      this.taskservice.updateTask(this.selectedTask.taskId, updatedTask).subscribe({
+        next: (updatedTask) => {
+          this.snackbar.open('Task updated successfully!', 'Close', { duration: 3000 });
+          this.loadTasks(); 
+          this.closeUpdateTaskModal();
+        },
+        error: (error) => {
+          this.snackbar.open('Failed to update the task.', 'Close', { duration: 3000 });
+          console.error('Error updating task:', error);
+        }
+      });
+    } else {
+      this.taskForm.markAllAsTouched(); // Mark all fields as touched to show validation errors
+    }
   }
+}
 
   deleteTask(taskId: string) {
+    if(taskId!=null){
     this.taskservice.deleteTask(taskId).subscribe({
       next:()=>{
         this.loadTasks()
@@ -185,5 +244,6 @@ export class ConfigureTasksComponent {
       }
     });
   }
+}
 
 }

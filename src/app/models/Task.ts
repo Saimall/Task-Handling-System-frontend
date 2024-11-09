@@ -16,9 +16,10 @@ export interface Task{
 
     taskId: string;
   taskTitle: string;
+  taskDescription:string;
   status: 'Completed' | 'In Progress' | 'Not Started';  // assuming these statuses
   assignedTo?: string; // optional if it can be unassigned
-  dueDate: string;
+  dueDate?: string;
   priority: 'LOW' | 'MEDIUM' | 'HIGH';
   empId?: number;
   dueDateTime?:string;      
