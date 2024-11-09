@@ -255,4 +255,50 @@ export class ConfigureTasksComponent {
   }
 }
 
+
+
+openReviewModal(task: any) {
+  this.selectedTask = task;
+  const modal = document.querySelector('#reviewModal') as HTMLElement;
+  modal.style.display = 'flex';
+}
+
+approveTask(task: any) {
+  this.updateTaskStatus(task.id, 'COMPLETED');
+  this.closeModal();
+}
+
+requestRework(task: any) {
+  this.updateTaskStatus(task.id, 'TODO');
+  this.closeModal();
+}
+
+closeModal() {
+  const modal = document.querySelector('#reviewModal') as HTMLElement;
+  modal.style.display = 'none';
+}
+
+
+
+updateTaskStatus(taskId: number, status: string) {
+  this.taskservice.updateTaskStatus(taskId, status).subscribe({
+    next: (response) => {
+      
+      this.snackbar.open('FeedBack sent Successfully!!', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+    },
+    error: (err) => {
+      
+      this.snackbar.open('Failed to sent the FeedBack!!', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+    }
+  });
+}
+
 }
