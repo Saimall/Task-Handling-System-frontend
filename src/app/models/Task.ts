@@ -21,7 +21,7 @@ export interface Task{
   dueDate: string;
   priority: 'LOW' | 'MEDIUM' | 'HIGH';
   empId?: number;
-            
+  dueDateTime?:string;      
     employeeId?: string;                  
     createdAt?: string;                   
     updatedAt?: string;                  

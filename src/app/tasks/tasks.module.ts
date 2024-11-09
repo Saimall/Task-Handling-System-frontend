@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ConfigureTasksComponent } from './configure-tasks/configure-tasks.component';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 @NgModule({
   declarations: [
     ConfigureTasksComponent
@@ -11,7 +11,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSnackBarModule
   ]
 })
 export class TasksModule { }

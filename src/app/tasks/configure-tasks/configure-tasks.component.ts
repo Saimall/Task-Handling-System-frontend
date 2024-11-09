@@ -6,6 +6,7 @@ import {EmployeeserviceService} from '../../services/employeeservice/employeeser
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Task } from '../../models/Task';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-configure-tasks',
@@ -45,7 +46,9 @@ export class ConfigureTasksComponent {
     private managerService: ManagerService,
     private taskservice:TaskserviceService,
     private employeeservice:EmployeeserviceService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private snackbar:MatSnackBar,
+   
   ) {
     this.taskForm = this.fb.group({
       taskTitle: ['', Validators.required],
@@ -126,8 +129,6 @@ export class ConfigureTasksComponent {
           dueDateTime: dateTimeString, 
         };
       }
-     
-
   
       console.log("TaskData"+ JSON.stringify(taskData))
       this.taskservice.addTaskToProject(this.projectID, taskData).subscribe({
@@ -136,8 +137,18 @@ export class ConfigureTasksComponent {
           this.loadEmployees();
           this.tasks.push(data);
           this.closeAddTaskModal();
+          this.snackbar.open('Task Added and Mail sent Successfully!!', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
         },
         error: (error) => {
+          this.snackbar.open('Error in Task Added or Mail ', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
           console.error('Failed to save task', error);
         }
       });
@@ -154,9 +165,25 @@ export class ConfigureTasksComponent {
   }
 
   deleteTask(taskId: string) {
-    // this.taskservice.deleteTask(taskId).subscribe(() => {
-    //   this.tasks = this.tasks.filter(task => task.id !== taskId);
-    // });
+    this.taskservice.deleteTask(taskId).subscribe({
+      next:()=>{
+        this.loadTasks()
+        
+      this.snackbar.open('Task Deleted Successfully!!', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+      },
+      error: (error) => {
+        this.snackbar.open('Error in Deleting the task ', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+        console.error('Failed to save task', error);
+      }
+    });
   }
 
 }

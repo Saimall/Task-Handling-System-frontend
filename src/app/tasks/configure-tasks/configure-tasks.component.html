@@ -15,6 +15,7 @@
             <th class="py-3 px-4">Task Name</th>
             <th class="py-3 px-4">Status</th>
             <th class="py-3 px-4">Assigned Employee</th>
+            <th class="py-3 py-4">Priority</th>
             <th class="py-3 px-4">Due Date</th>
             <th class="py-3 px-4">Actions</th>
           </tr>
@@ -30,10 +31,21 @@
               </span>
             </td>
             <td class="py-3 px-4">{{  task.assignedTo  }}</td>
-            <td class="py-3 px-4">{{ task.dueDate | date: 'shortDate' }}</td>
-            <td class="py-3 px-4 flex items-center">
-              <button (click)="updateTask(task)" class="bg-primary-500 hover:bg-primary-700 text-white rounded-md py-2 px-4 mr-2 transition-all">Update</button>
-              <button (click)="deleteTask(task.taskId)" class="bg-red-500 hover:bg-red-700 text-white rounded-md py-2 px-4 transition-all">Delete</button>
+            <td class="py-3 px-4">{{  task.priority  }}</td>
+            <td class="py-3 px-4">{{ task.dueDateTime|date: 'medium'}}</td>
+            <td class="py-3 px-4 flex items-center space-x-2">
+              <button 
+                (click)="updateTask(task)" 
+                class="bg-gray-500 text-white hover:bg-gray-700 hover:text-gray-400 rounded-lg py-2 px-3 transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl transform hover:scale-90 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 z-10"
+              >
+                Update
+              </button>
+              <button 
+                (click)="deleteTask(task.taskId)" 
+                class="bg-red-500 hover:bg-red-700 text-white rounded-md py-2 px-4 transition-all"
+              >
+                Delete
+              </button>
             </td>
           </tr>
         </tbody>

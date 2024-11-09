@@ -42,8 +42,8 @@ export class TaskserviceService {
     return this.http.put<Task>(`${this.apiUrl4}/updateTaskStatus/${taskId}/${status}`, {});
   }
 
-  deleteTask(taskId: string): Observable<string> {
-    return this.http.delete<string>(`${this.apiUrl4}/deleteTask/${taskId}`);
+  deleteTask(taskId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl4}/deleteTask/${taskId}`);
   }
 
   getTasksByEmployeeId(employeeId: number): Observable<Task[]> {

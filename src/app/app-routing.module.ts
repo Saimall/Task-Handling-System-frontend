@@ -12,7 +12,7 @@ const routes: Routes = [
   {path:"register",component:ManagerRegistrationFormComponent},
   {path:"login",component:LogincomponentComponent},
   {path:"dashboard/:managerid",component:ManagerdashboardComponent,canActivate:[AuthGuard]},
-  { path: 'configure-tasks/:managerId/:projectId', component: ConfigureTasksComponent },
+  { path: 'configure-tasks/:managerId/:projectId', component: ConfigureTasksComponent,canActivate:[AuthGuard] },
 ];
 
 @NgModule({

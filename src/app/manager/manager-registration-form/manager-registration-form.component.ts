@@ -44,6 +44,7 @@ export class ManagerRegistrationFormComponent {
       .subscribe({       
         next: (response) => {
           const managerid=response.managerId;
+          console.log("managerID"+managerid)
           this.snackBar.open('Registration successful', 'Close', {
             duration: 3000,
             horizontalPosition: 'right',
