@@ -33,8 +33,17 @@
           <td class="py-3 px-4">{{ task.taskTitle }}</td>
           <td class="py-3 px-4">
             <span class="relative inline-flex flex-col items-center">
+             
               <span class="block w-4 h-4 rounded-full animate-pulse"
-                [ngStyle]="{ background: task.status === 'Completed' ? '#22c55e' : task.status === 'In Progress' ? '#f39c12' : '#ff0000' }"></span>
+                [ngStyle]="{
+                  background: task.status === 'Completed' ? '#22c55e' :
+                              task.status === 'In Progress' ? '#f39c12' :
+                              task.status === 'In Review' ? '#1e40af' :
+                              task.status === 'Overdue' ? '#ef4444' :
+                              '#9ca3af'   // Default gray for 'To Do' or if no status is set
+                }">
+              </span>
+              
               <span class="text-neutral-600 text-xs mt-1">{{ task.status }}</span>
             </span>
           </td>

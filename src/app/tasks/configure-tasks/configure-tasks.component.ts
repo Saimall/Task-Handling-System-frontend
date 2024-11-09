@@ -17,11 +17,20 @@ export class ConfigureTasksComponent {
 
 
   taskForm: FormGroup;
-
   selectedTask: Task = {
-    taskTitle: '', taskDescription: '', dueDateTime: '', priority: 'LOW', status: 'Not Started',
-    taskId: '',
-    dueDate: ''
+    taskId: '',               
+    taskTitle: '',           
+    taskDescription: '',     
+    status: 'To Do',          
+    assignedTo: '',          
+    priority: 'LOW',          
+    dueDate: '',              
+    dueDateTime: '',         
+    empId: undefined,         
+    employeeId: '',          
+    createdAt: '',           
+    updatedAt: '',           
+    completedAt: ''           
   };
   isUpdateTaskModalOpen = false;
   
