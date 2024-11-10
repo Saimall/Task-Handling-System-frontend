@@ -38,5 +38,12 @@ export class EmployeeserviceService {
     return this.http.post<Employee>(`${this.apiUrl3}/registerEmployee/${managerId}`, employeeData,{headers:this.authservice.getHeaders()});
   }
 
+  getEmployeeDetails(employeeId:any):Observable<Employee>{
+    return this.http.get<Employee>(`${this.apiUrl4}/viewEmployeeDetails/${employeeId}`,{headers:this.authservice.getHeaders()})
+  }
+
+
+  
+
  
 }

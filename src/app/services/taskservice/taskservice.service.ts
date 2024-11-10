@@ -46,7 +46,7 @@ export class TaskserviceService {
     return this.http.delete<void>(`${this.apiUrl4}/deleteTask/${taskId}`,{headers:this.authservice.getHeaders() });
   }
 
-  getTasksByEmployeeId(employeeId: number): Observable<Task[]> {
+  getTasksByEmployeeId(employeeId: string): Observable<Task[]> {
     return this.http.get<Task[]>(`${this.apiUrl4}/getTasksByEmployeeId/${employeeId}`,{headers:this.authservice.getHeaders() });
   }
 
