@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { EmployeedashboardComponent } from './employeedashboard/employeedashboard.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { BaseChartDirective } from 'ng2-charts';
-
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -14,7 +14,7 @@ import { BaseChartDirective } from 'ng2-charts';
     CommonModule,
     BaseChartDirective,
     AppRoutingModule,
- 
+    MatSnackBarModule
    
   ]
 })

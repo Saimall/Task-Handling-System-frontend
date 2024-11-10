@@ -1,176 +1,124 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef, ViewChild, ElementRef, ChangeDetectionStrategy, AfterViewChecked } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { AuthService } from '../../services/authenticationservice/authenticationservice.service';
-import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeserviceService } from '../../services/employeeservice/employeeservice.service';
 import { TaskserviceService } from '../../services/taskservice/taskservice.service';
 import { Chart, ChartData, ChartOptions, ChartType, registerables } from 'chart.js';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { AuthService } from '../../services/authenticationservice/authenticationservice.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-employeedashboard',
   templateUrl: './employeedashboard.component.html',
-  styleUrls: ['./employeedashboard.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./employeedashboard.component.css']
 })
-export class EmployeedashboardComponent implements OnInit, AfterViewInit, AfterViewChecked {
-  radarChartType: ChartType = 'radar';
-  barChartType: ChartType = 'bar';
+export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewInit {
+  private destroy$ = new Subject<void>();
 
-  taskData: ChartData = {
-    labels: ['Completed', 'To Do', 'In Progress', 'In Review', 'Over Due'], 
+  @ViewChild('barChartCanvas', { static: true }) barChartCanvas!: ElementRef;
+  @ViewChild('doughnutChartCanvas', { static: true }) doughnutChartCanvas!: ElementRef;
+
+  public empId: string | undefined;
+  employeeDetails: any = {};
+
+ 
+  taskData: ChartData<'doughnut'> = {
+    labels: ['Completed', 'To Do', 'In Progress', 'In Review', 'Overdue'],
     datasets: [{
-      data: [0, 0, 0, 0, 0], 
-      backgroundColor: 'rgba(75, 192, 192, 0.2)', 
+      data: [0, 0, 0, 0, 0],
+      backgroundColor: ['#10B981', '#6366F1', '#F59E0B', '#FFD700', '#EF4444'],
       borderColor: '#4BC0C0',
-      borderWidth: 3, 
-      pointBackgroundColor: ['#10B981', '#6366F1', '#F59E0B', '#FFD700', '#EF4444'], 
-      pointBorderColor: '#FFFFFF', 
-      pointBorderWidth: 3, 
-      pointRadius: 6, 
-      hoverBackgroundColor: ['#10B981', '#6366F1', '#F59E0B', '#FFD700', '#EF4444'], 
-      hoverBorderColor: '#FFFFFF', 
-      hoverBorderWidth: 4,
+      borderWidth: 3
     }]
   };
   
-  priorityData: ChartData = {
+  priorityData: ChartData<'bar'> = {
     labels: ['Low', 'Medium', 'High'],
     datasets: [{
       data: [0, 0, 0],
       backgroundColor: ['#10B981', '#F59E0B', '#EF4444']
     }]
   };
-
-  barChartOptions: ChartOptions = {
+  
+  doughnutChartOptions: ChartOptions<'doughnut'> = {
     responsive: true,
-    plugins: {
-      legend: { position: 'top' }
-    }
-  };
-
-  radarChartOptions: ChartOptions = {
-    responsive: true,
-    scales: {
-      r: {
-        beginAtZero: true,
-        angleLines: {
-          display: true,
-          color: '#ddd', 
-          lineWidth: 1
-        },
-        grid: {
-          circular: true, 
-          color: '#E0E0E0', 
-          lineWidth: 1
-        },
-        ticks: {
-          backdropColor: 'rgba(255, 255, 255, 0.6)', 
-          color: '#333', 
-          font: {
-            size: 14, 
-            weight: 'bold' 
-          },
-          stepSize: 1 
-        },
-        max: 5
-      }
-    },
+    maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: 'top',
-        labels: {
-          color: '#333',
-          font: {
-            size: 16,
-            weight: 'bold'
-          }
-        }
-      },
-      tooltip: {
-        enabled: true,
-        backgroundColor: '#333',
-        titleColor: '#FFF',
-        bodyColor: '#FFF',
-        borderColor: '#4BC0C0',
-        borderWidth: 1,
-        padding: 10,
-        cornerRadius: 5,
+        position: 'top'
       }
     }
   };
-
-  @ViewChild('barChartCanvas') barChartCanvas: ElementRef | undefined;
-  @ViewChild('raderChartCanvas') raderChartCanvas: ElementRef | undefined;
-
-  employeeDetails: any = {};
-  public empId: string | undefined;
+  
+  chartOptions: ChartOptions<'bar'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top'
+      }
+    }
+  };
+  
+  doughnutChart: Chart<'doughnut'> | null = null;
+  barChart: Chart<'bar'> | null = null;
 
   constructor(
     private employeeService: EmployeeserviceService,
-    private taskservice: TaskserviceService,
+    private taskService: TaskserviceService,
     private route: ActivatedRoute,
+    private authService: AuthService,
     private router: Router,
-    private authservice: AuthService,
-    private snackbar: MatSnackBar,
-    private cdr: ChangeDetectorRef
-  ) {}
+    private snackbar: MatSnackBar
+  ) { }
 
   ngOnInit(): void {
-    const employeeid = this.route.snapshot.paramMap.get('employeeid');
-    if (employeeid) {
-      this.empId = employeeid;
-      this.fetchEmployeeDetails(employeeid);
-      this.fetchTasks(employeeid);
+    const employeeId = this.route.snapshot.paramMap.get('employeeid');
+    if (employeeId) {
+      this.empId = employeeId;
+      this.fetchEmployeeDetails(employeeId);
+      this.fetchTasks(employeeId);
     }
   }
 
   ngAfterViewInit(): void {
-    if (this.barChartCanvas && this.raderChartCanvas && !this.taskData.datasets[0].data.every(item => item === 0)) {
-      this.initializeCharts();
-    }
+    this.createCharts();
   }
 
-  ngAfterViewChecked(): void {
-    // Resize chart manually after view updates
-    if (this.barChartCanvas && this.raderChartCanvas) {
-      this.barChartCanvas.nativeElement.style.width = '100%';
-      this.raderChartCanvas.nativeElement.style.width = '100%';
-      if (this.barChartCanvas.nativeElement.chart) {
-        this.barChartCanvas.nativeElement.chart.update();
-      }
-      if (this.raderChartCanvas.nativeElement.chart) {
-        this.raderChartCanvas.nativeElement.chart.update();
-      }
-    }
+  ngOnDestroy(): void {
+    this.destroyCharts();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  private fetchEmployeeDetails(employeeid: string): void {
-    this.employeeService.getEmployeeDetails(employeeid).subscribe({
-      next: (data) => {
-        console.log("Employees Data", JSON.stringify(data));
-        this.employeeDetails = data;
-        this.cdr.markForCheck();
-      },
-      error: (error) => {
-        console.error('Error fetching employee details:', error);
-      }
-    });
+  private fetchEmployeeDetails(employeeId: string): void {
+    this.employeeService.getEmployeeDetails(employeeId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data) => {
+          this.employeeDetails = data;
+        },
+        error: (error) => {
+          console.error('Error fetching employee details:', error);
+        }
+      });
   }
 
-  private fetchTasks(employeeid: string): void {
-    this.taskservice.getTasksByEmployeeId(employeeid).subscribe({
-      next: (tasks) => {
-        console.log("Employee tasks", tasks);
-        this.processTaskData(tasks);
-        this.cdr.markForCheck();
-      },
-      error: (error) => {
-        console.error('Error fetching tasks:', error);
-      }
-    });
+  private fetchTasks(employeeId: string): void {
+    this.taskService.getTasksByEmployeeId(employeeId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (tasks) => {
+          this.processTaskData(tasks);
+          this.updateCharts();
+        },
+        error: (error) => {
+          console.error('Error fetching tasks:', error);
+        }
+      });
   }
 
   private processTaskData(tasks: any[]): void {
@@ -198,26 +146,48 @@ export class EmployeedashboardComponent implements OnInit, AfterViewInit, AfterV
     ];
   }
 
-  private initializeCharts(): void {
-    if (this.barChartCanvas && this.raderChartCanvas) {
-      new Chart(this.barChartCanvas.nativeElement, {
-        type: this.barChartType,
-        data: this.priorityData,
-        options: this.barChartOptions
-      });
-
-      new Chart(this.raderChartCanvas.nativeElement, {
-        type: this.radarChartType,
+  private createCharts(): void {
+    if (this.doughnutChartCanvas?.nativeElement) {
+      this.doughnutChart = new Chart(this.doughnutChartCanvas.nativeElement, {
+        type: 'doughnut',
         data: this.taskData,
-        options: this.radarChartOptions
+        options: this.doughnutChartOptions
+      });
+    }
+
+    if (this.barChartCanvas?.nativeElement) {
+      this.barChart = new Chart(this.barChartCanvas.nativeElement, {
+        type: 'bar',
+        data: this.priorityData,
+        options: this.chartOptions
       });
     }
   }
 
+  private updateCharts(): void {
+    if (this.doughnutChart) {
+      this.doughnutChart.update();
+    }
+    if (this.barChart) {
+      this.barChart.update();
+    }
+  }
+
+  private destroyCharts(): void {
+    if (this.doughnutChart) {
+      this.doughnutChart.destroy();
+      this.doughnutChart = null;
+    }
+    if (this.barChart) {
+      this.barChart.destroy();
+      this.barChart = null;
+    }
+  }
+
   handleLogout() {
-    this.authservice.removeToken();
+    this.authService.removeToken();
     this.router.navigate(['']);
-    this.snackbar.open('Logout Successfully', 'Close', {
+    this.snackbar.open('Logged out successfully', 'Close', {
       duration: 3000,
       horizontalPosition: 'right',
       verticalPosition: 'top',
