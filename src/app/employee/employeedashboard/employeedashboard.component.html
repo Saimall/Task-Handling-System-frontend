@@ -1,12 +1,12 @@
 <div class="min-h-screen bg-gray-50" style="user-select: none; cursor: default;">
-    <header class="bg-white shadow-md mt-8">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header class="bg-white shadow-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
         <div class="flex items-center justify-between h-16">
-          <div class="flex items-center gap-4">
+          <div class="flex items-center justify-center gap-4">
             <span class="h-16 w-auto">
               <img src="assets/TaskLOOP.png" alt="TaskLoop Logo" class="h-full w-auto object-contain" />
             </span>
-            <h1 class="text-3xl font-bold text-gray-900 font-title">TaskLOOP</h1>
+            <span class="text-3xl font-bold text-gray-900 font-title">TaskLOOP</span>
           </div>
           <div class="flex items-center gap-4">
             <button
@@ -105,6 +105,7 @@
                 </div>
                 <div class="mt-6 flex justify-center gap-3">
                     <button
+                     (click)="toggleEditProfile()"
                         class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-gray-500" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2">
@@ -144,13 +145,18 @@
                     <canvas #barChartCanvas></canvas>
                 </div>
             </div>
-        
-            
+
+
+            <div *ngIf="isEditing">
+                <app-edit-profile
+                  [name]="employeeDetails.name"
+                  [contact]="employeeDetails.contact"
+                  (saveProfile)="updateEmployeeDetails($event)">
+                </app-edit-profile>
+                <button mat-raised-button (click)="toggleEditProfile()">Cancel</button>
+              </div>  
        
       </div>
     </main>
-
-
-    
   </div>
   

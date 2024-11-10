@@ -23,7 +23,7 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
 
   public empId: string | undefined;
   employeeDetails: any = {};
-
+  isEditing: boolean = false;
  
   taskData: ChartData<'doughnut'> = {
     labels: ['Completed', 'To Do', 'In Progress', 'In Review', 'Overdue'],
@@ -34,6 +34,10 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
       borderWidth: 3
     }]
   };
+
+  toggleEditProfile(): void {
+    this.isEditing = !this.isEditing;
+  }
   
   priorityData: ChartData<'bar'> = {
     labels: ['Low', 'Medium', 'High'],
@@ -100,6 +104,7 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
       .subscribe({
         next: (data) => {
           this.employeeDetails = data;
+          console.log("Employeedeatials"+JSON.stringify(this.employeeDetails));
         },
         error: (error) => {
           console.error('Error fetching employee details:', error);
@@ -182,6 +187,29 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
       this.barChart.destroy();
       this.barChart = null;
     }
+  }
+
+
+
+  updateEmployeeDetails(updatedData: { name: string, contact: string }): void {
+    console.log("updated Data"+updatedData);
+    const designation= this.employeeDetails.designation;
+    const updatedEmployeeData = { ...updatedData, designation };
+   
+    this.employeeService.updateEmployee(updatedEmployeeData,this.empId)
+      .subscribe({
+        next: () => {
+          this.employeeDetails = { ...this.employeeDetails, ...updatedData };
+          this.isEditing = false;
+          this.snackbar.open('Profile updated successfully!', 'Close', { duration: 3000 ,  horizontalPosition: 'right',
+          verticalPosition: 'top'});
+        },
+        error: (err) => {
+          console.error('Error updating employee details:', err);
+          this.snackbar.open('Failed to update profile', 'Close', { duration: 3000,  horizontalPosition: 'right',
+          verticalPosition: 'top' });
+        }
+      });
   }
 
   handleLogout() {
