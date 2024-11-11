@@ -50,6 +50,7 @@ export class EditProfileComponent implements OnInit {
   }
 
   onCancel(): void {
-    this.closeDialog.emit(); // Close modal if canceled
+
+    this.closeDialog.emit(); 
   }
 }

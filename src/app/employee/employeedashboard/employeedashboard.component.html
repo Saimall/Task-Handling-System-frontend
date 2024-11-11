@@ -151,9 +151,10 @@
                 <app-edit-profile
                   [name]="employeeDetails.name"
                   [contact]="employeeDetails.contact"
-                  (saveProfile)="updateEmployeeDetails($event)">
+                  (saveProfile)="updateEmployeeDetails($event)"
+                  (closeDialog)="closeeditprofile()">
                 </app-edit-profile>
-                <button mat-raised-button (click)="toggleEditProfile()">Cancel</button>
+              
               </div>  
        
       </div>

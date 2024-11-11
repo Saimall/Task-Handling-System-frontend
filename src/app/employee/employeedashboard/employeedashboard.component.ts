@@ -36,7 +36,13 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
   };
 
   toggleEditProfile(): void {
+    
     this.isEditing = !this.isEditing;
+    console.log("closeing the dialog"+this.isEditing)
+  }
+
+  closeeditprofile():void{
+    this.isEditing=false;
   }
   
   priorityData: ChartData<'bar'> = {
