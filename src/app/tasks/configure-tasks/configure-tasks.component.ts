@@ -21,7 +21,7 @@ export class ConfigureTasksComponent {
     taskId: '',               
     taskTitle: '',           
     taskDescription: '',     
-    status: 'To Do',          
+    status: 'ToDo',          
     assignedTo: '',          
     priority: 'LOW',          
     dueDate: '',              

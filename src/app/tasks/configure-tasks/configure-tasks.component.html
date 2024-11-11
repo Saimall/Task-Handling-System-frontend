@@ -37,8 +37,8 @@
               <span class="block w-4 h-4 rounded-full animate-pulse"
                 [ngStyle]="{
                   background: task.status === 'Completed' ? '#22c55e' :
-                              task.status === 'In Progress' ? '#f39c12' :
-                              task.status === 'In Review' ? '#1e40af' :
+                              task.status === 'In_Progress' ? '#f39c12' :
+                              task.status === 'In_Review' ? '#1e40af' :
                               task.status === 'Overdue' ? '#ef4444' :
                               '#2a3439' 
                 }">
@@ -53,7 +53,7 @@
           <td class="py-3 px-4 flex items-center space-x-2">
 
             <button
-  *ngIf="task.status === 'In Review'"
+  *ngIf="task.status === 'In_Review'"
   (click)="openReviewModal(task)"
   class="bg-blue-500 hover:bg-blue-700 text-white rounded-full p-3 transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
 >

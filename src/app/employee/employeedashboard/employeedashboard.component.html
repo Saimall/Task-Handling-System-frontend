@@ -114,7 +114,7 @@
                         </svg>
                         Edit Profile
                     </button>
-                    <button
+                    <button (click)="openChangePasswordModal()"
                     class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                    
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
@@ -160,4 +160,70 @@
       </div>
     </main>
   </div>
+
+
+
+
+<!-- Modal for Changing Password -->
+<div *ngIf="isPasswordModalOpen" class="fixed inset-0 flex items-center justify-center z-10 bg-gray-500 bg-opacity-50">
+<div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+  <h3 class="text-lg font-semibold text-gray-900 mb-4">Change Password</h3>
+  <form [formGroup]="passwordForm" (ngSubmit)="submitChangePassword()">
+    <div class="mb-4">
+      <label for="currentPassword" class="block text-sm font-medium text-gray-700">Current Password</label>
+      <input
+        id="currentPassword"
+        type="password"
+        formControlName="currentPassword"
+        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        required />
+      <div *ngIf="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched" class="text-red-600 text-sm">
+        Current password is required.
+      </div>
+    </div>
+    <div class="mb-4">
+      <label for="newPassword" class="block text-sm font-medium text-gray-700">New Password</label>
+      <input
+        id="newPassword"
+        type="password"
+        formControlName="newPassword"
+        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        required />
+      <div *ngIf="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched" class="text-red-600 text-sm">
+        New password is required.
+      </div>
+    </div>
+    <div class="mb-4">
+      <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirm New Password</label>
+      <input
+        id="confirmPassword"
+        type="password"
+        formControlName="confirmPassword"
+        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        required />
+      <div *ngIf="passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched" class="text-red-600 text-sm">
+        Confirm password is required.
+      </div>
+      <div *ngIf="passwordForm.hasError('passwordMismatch') && passwordForm.get('confirmPassword')?.touched" class="text-red-600 text-sm">
+        New password and confirm password do not match.
+      </div>
+    </div>
+    <div class="flex justify-end gap-3">
+      <button
+        type="button"
+        (click)="closePasswordModal()"
+        class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+        Cancel
+      </button>
+      <button
+        type="submit"
+        [disabled]="passwordForm.invalid"
+        class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+       Change Password
+      </button>
+    </div>
+  </form>
+</div>
+</div>
+
   

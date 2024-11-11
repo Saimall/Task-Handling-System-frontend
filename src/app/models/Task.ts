@@ -15,13 +15,13 @@ export interface Task {
   taskId: string;
   taskTitle: string;
   taskDescription: string;
-  status: 'To Do' | 'In Progress' | 'In Review' | 'Completed' | 'Overdue';  // Updated status values
-  assignedTo?: string; // Optional if it can be unassigned
-  dueDate?: string; // Optional due date
+  status: 'ToDo' | 'In_Progress' | 'In_Review' | 'Completed' | 'Overdue';  
+  assignedTo?: string; 
+  dueDate?: string; 
   priority: 'LOW' | 'MEDIUM' | 'HIGH';
-  empId?: number; // Employee ID (for internal use)
-  dueDateTime?: string; // Full date-time string
-  employeeId?: string; // Can be used as a different type if needed
+  empId?: number; 
+  dueDateTime?: string;
+  employeeId?: string;
   createdAt?: string;
   updatedAt?: string;
   completedAt?: string;

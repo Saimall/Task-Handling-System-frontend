@@ -13,7 +13,7 @@ const routes: Routes = [
   {path:"login",component:LogincomponentComponent},
   {path:"dashboard/:managerid",component:ManagerdashboardComponent,canActivate:[AuthGuard]},
   { path: 'configure-tasks/:managerId/:projectId', component: ConfigureTasksComponent,canActivate:[AuthGuard] },
-  {path:"employeedashboard/:employeeid",component:EmployeedashboardComponent},
+  {path:"employeedashboard/:employeeid",component:EmployeedashboardComponent,canActivate:[AuthGuard]},
 ];
 
 @NgModule({

@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../services/authenticationservice/authenticationservice.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 
 Chart.register(...registerables);
 
@@ -24,9 +25,9 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
   public empId: string | undefined;
   employeeDetails: any = {};
   isEditing: boolean = false;
- 
+
   taskData: ChartData<'doughnut'> = {
-    labels: ['Completed', 'To Do', 'In Progress', 'In Review', 'Overdue'],
+    labels: ['Completed', 'ToDo', 'In Progress', 'In Review', 'Overdue'],
     datasets: [{
       data: [0, 0, 0, 0, 0],
       backgroundColor: ['#10B981', '#6366F1', '#F59E0B', '#FFD700', '#EF4444'],
@@ -35,16 +36,18 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
     }]
   };
 
+  passwordForm: FormGroup;  // Moved this out of constructor and initialized here
+  isPasswordModalOpen: boolean = false;
+
   toggleEditProfile(): void {
-    
     this.isEditing = !this.isEditing;
-    console.log("closeing the dialog"+this.isEditing)
+    console.log("closeing the dialog" + this.isEditing);
   }
 
-  closeeditprofile():void{
-    this.isEditing=false;
+  closeeditprofile(): void {
+    this.isEditing = false;
   }
-  
+
   priorityData: ChartData<'bar'> = {
     labels: ['Low', 'Medium', 'High'],
     datasets: [{
@@ -52,7 +55,7 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
       backgroundColor: ['#10B981', '#F59E0B', '#EF4444']
     }]
   };
-  
+
   doughnutChartOptions: ChartOptions<'doughnut'> = {
     responsive: true,
     maintainAspectRatio: false,
@@ -62,7 +65,7 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
       }
     }
   };
-  
+
   chartOptions: ChartOptions<'bar'> = {
     responsive: true,
     maintainAspectRatio: false,
@@ -72,7 +75,7 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
       }
     }
   };
-  
+
   doughnutChart: Chart<'doughnut'> | null = null;
   barChart: Chart<'bar'> | null = null;
 
@@ -83,7 +86,14 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
     private authService: AuthService,
     private router: Router,
     private snackbar: MatSnackBar
-  ) { }
+  ) {
+    // Initialize the form group here directly
+    this.passwordForm = new FormGroup({
+      currentPassword: new FormControl('', Validators.required),
+      newPassword: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      confirmPassword: new FormControl('', [Validators.required])
+    }, { validators: this.passwordMatchValidator });
+  }
 
   ngOnInit(): void {
     const employeeId = this.route.snapshot.paramMap.get('employeeid');
@@ -110,12 +120,24 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
       .subscribe({
         next: (data) => {
           this.employeeDetails = data;
-          console.log("Employeedeatials"+JSON.stringify(this.employeeDetails));
+          console.log("Employeedeatials" + JSON.stringify(this.employeeDetails));
         },
         error: (error) => {
           console.error('Error fetching employee details:', error);
         }
       });
+  }
+
+  private passwordMatchValidator(form: AbstractControl): { [key: string]: boolean } | null {
+    const formGroup = form as FormGroup;
+    const newPassword = formGroup.get('newPassword')?.value;
+    const confirmPassword = formGroup.get('confirmPassword')?.value;
+
+    if (newPassword && confirmPassword && newPassword !== confirmPassword) {
+      return { passwordMismatch: true };
+    }
+
+    return null;
   }
 
   private fetchTasks(employeeId: string): void {
@@ -195,7 +217,70 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
     }
   }
 
+  openChangePasswordModal() {
+    this.isPasswordModalOpen = true;
+  }
 
+  closePasswordModal() {
+    this.isPasswordModalOpen = false;
+  }
+
+  submitChangePassword() {
+    if (this.passwordForm.invalid) {
+      return;
+    }
+
+    const { currentPassword, newPassword } = this.passwordForm.value;
+    if (!currentPassword || !newPassword) {
+      this.snackbar.open('Both password fields are required.', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+      return;
+    }
+
+    const requestPayload = {
+      oldPassword: currentPassword,
+      newPassword: newPassword
+    };
+    console.log('Changing password with:', currentPassword, newPassword);
+
+    this.employeeService.updatePassword(this.employeeDetails.email, requestPayload)
+      .subscribe({
+        next: () => {
+       
+          this.snackbar.open('Password changed successfully!', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
+
+          // Close the modal
+          this.closePasswordModal();
+
+          // Remove the token after changing the password (if applicable)
+          this.authService.removeToken();
+          this.router.navigate(['/login']);
+        },
+        error: (error) => {
+          // Handle different errors
+          if (error.status === 400) {
+            this.snackbar.open('Incorrect current password. Please try again.', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top',
+            });
+          } else if (error.status === 500) {
+            this.snackbar.open('Server error, please try again later.', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top',
+            });
+          }
+        }
+      });
+  }
 
   updateEmployeeDetails(updatedData: { name: string, contact: string }): void {
     console.log("updated Data"+updatedData);
@@ -227,4 +312,5 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
       verticalPosition: 'top',
     });
   }
+
 }
