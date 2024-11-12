@@ -1,0 +1,33 @@
+<div *ngIf="name || contact" class="fixed inset-0 bg-gray-600 bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-lg w-96 p-6">
+      <h2 class="text-xl font-bold mb-4">Edit Profile</h2>
+      <form [formGroup]="editProfileForm" (ngSubmit)="onSave()">
+        <div class="mb-4">
+          <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+          <input id="name" type="text" formControlName="name" class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-600" />
+          <div *ngIf="editProfileForm.get('name')?.touched && editProfileForm.get('name')?.invalid" class="text-sm text-red-500">
+            <small *ngIf="editProfileForm.get('name')?.hasError('required')">Name is required.</small>
+            <small *ngIf="editProfileForm.get('name')?.hasError('minlength')">Name must be at least 3 characters long.</small>
+            <small *ngIf="editProfileForm.get('name')?.hasError('maxlength')">Name cannot exceed 50 characters.</small>
+          </div>
+        </div>
+  
+        <div class="mb-4">
+          <label for="contact" class="block text-sm font-medium text-gray-700">Contact</label>
+          <input id="contact" type="text" formControlName="contact" class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-600" />
+          <div *ngIf="editProfileForm.get('contact')?.touched && editProfileForm.get('contact')?.invalid" class="text-sm text-red-500">
+            <small *ngIf="editProfileForm.get('contact')?.hasError('required')">Contact is required.</small>
+            <small *ngIf="editProfileForm.get('contact')?.hasError('pattern')">Contact should only contain numbers.</small>
+            <small *ngIf="editProfileForm.get('contact')?.hasError('minlength')">Contact must be at least 10 digits long.</small>
+            <small *ngIf="editProfileForm.get('contact')?.hasError('maxlength')">Contact cannot exceed 15 digits.</small>
+          </div>
+        </div>
+  
+        <div class="flex justify-between mt-4">
+          <button type="submit" [disabled]="editProfileForm.invalid" class="bg-blue-600 text-white px-4 py-2 rounded-md">Save</button>
+          <button type="button" (click)="onCancel()" class="bg-gray-400 text-white px-4 py-2 rounded-md">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

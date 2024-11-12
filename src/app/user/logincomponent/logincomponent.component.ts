@@ -39,7 +39,7 @@ export class LogincomponentComponent {
               verticalPosition: 'top',
               panelClass:"success-snackbar"
             });
-            this.router.navigate([response.role === 'MANAGER' ? `/dashboard/${response.id}` : `/employee/${response.id}`]);
+            this.router.navigate([response.role === 'MANAGER' ? `/dashboard/${response.id}` : `/employeedashboard/${response.id}`]);
           } else {
             this.snackbar.open('Authentication failed', 'Close', {
               duration: 3000,

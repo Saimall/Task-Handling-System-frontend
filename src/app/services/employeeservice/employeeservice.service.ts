@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Employee } from '../../models/employee';
+import { PasswordChangeRequest } from '../../models/passwordchangerequest';
 import { AuthService } from '../authenticationservice/authenticationservice.service';
 
 @Injectable({
@@ -37,6 +38,18 @@ export class EmployeeserviceService {
   addEmployee(employeeData: Employee,managerId:string): Observable<Employee> {
     return this.http.post<Employee>(`${this.apiUrl3}/registerEmployee/${managerId}`, employeeData,{headers:this.authservice.getHeaders()});
   }
+
+  getEmployeeDetails(employeeId:any):Observable<Employee>{
+    return this.http.get<Employee>(`${this.apiUrl4}/viewEmployeeDetails/${employeeId}`,{headers:this.authservice.getHeaders()})
+  }
+
+  updatePassword(email: string, passwordChangeRequest: PasswordChangeRequest): Observable<void> {
+    console.log("Email change:"+email)
+    return this.http.post<void>(`${this.apiUrl4}/updatepassword/${email}`, passwordChangeRequest,{headers:this.authservice.getHeaders()});
+  }
+
+
+  
 
  
 }

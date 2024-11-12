@@ -11,21 +11,18 @@
 // }
 
 
-export interface Task{
-  employeeDetails: string;
-
-
-    taskId: string;
+export interface Task {
+  taskId: string;
   taskTitle: string;
-  status: 'Completed' | 'In Progress' | 'Not Started';  // assuming these statuses
-  assignedTo?: string; // optional if it can be unassigned
-  dueDate: string;
+  taskDescription: string;
+  status: 'ToDo' | 'In_Progress' | 'In_Review' | 'Completed' | 'Overdue';  
+  assignedTo?: string; 
+  dueDate?: string; 
   priority: 'LOW' | 'MEDIUM' | 'HIGH';
-  empId?: number;
-  dueDateTime?:string;      
-    employeeId?: string;                  
-    createdAt?: string;                   
-    updatedAt?: string;                  
-    completedAt?: string;  
-    taskDescription: string;
+  empId?: number; 
+  dueDateTime?: string;
+  employeeId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  completedAt?: string;
 }

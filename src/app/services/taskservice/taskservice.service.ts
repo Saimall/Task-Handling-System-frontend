@@ -23,34 +23,34 @@ export class TaskserviceService {
   }
 
   getTasksByProjectId(projectId: number): Observable<Task[]> {
-    return this.http.get<Task[]>(`${this.apiUrl4}/getTaskByProjectId/${projectId}`);
+    return this.http.get<Task[]>(`${this.apiUrl4}/getTaskByProjectId/${projectId}`,{headers:this.authservice.getHeaders() });
   }
 
   getTasksByCreatedDate(createdDate: string): Observable<Task[]> {
-    return this.http.get<Task[]>(`${this.apiUrl4}/getTasksByCreatedDate/${createdDate}`);
+    return this.http.get<Task[]>(`${this.apiUrl4}/getTasksByCreatedDate/${createdDate}`,{headers:this.authservice.getHeaders() });
   }
 
   getTasksByStatus(status: string): Observable<Task[]> {
-    return this.http.get<Task[]>(`${this.apiUrl4}/getTasksByStatus/${status}`);
+    return this.http.get<Task[]>(`${this.apiUrl4}/getTasksByStatus/${status}`,{headers:this.authservice.getHeaders() });
   }
 
-  updateTask(taskId: number, taskRequestDto: Task): Observable<Task> {
-    return this.http.put<Task>(`${this.apiUrl4}/updateTasks/${taskId}`, taskRequestDto);
+  updateTask(taskId: string, taskRequestDto: Task): Observable<Task> {
+    return this.http.put<Task>(`${this.apiUrl4}/updateTasks/${taskId}`, taskRequestDto,{headers:this.authservice.getHeaders() });
   }
 
   updateTaskStatus(taskId: number, status: string): Observable<Task> {
-    return this.http.put<Task>(`${this.apiUrl4}/updateTaskStatus/${taskId}/${status}`, {});
+    return this.http.put<Task>(`${this.apiUrl4}/updateTaskStatus/${taskId}/${status}`,{headers:this.authservice.getHeaders() });
   }
 
   deleteTask(taskId: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl4}/deleteTask/${taskId}`);
+    return this.http.delete<void>(`${this.apiUrl4}/deleteTask/${taskId}`,{headers:this.authservice.getHeaders() });
   }
 
-  getTasksByEmployeeId(employeeId: number): Observable<Task[]> {
-    return this.http.get<Task[]>(`${this.apiUrl4}/getTasksByEmployeeId/${employeeId}`);
+  getTasksByEmployeeId(employeeId: string): Observable<Task[]> {
+    return this.http.get<Task[]>(`${this.apiUrl4}/getTasksByEmployeeId/${employeeId}`,{headers:this.authservice.getHeaders() });
   }
 
   submitTaskForReview(taskId: number): Observable<Task> {
-    return this.http.put<Task>(`${this.apiUrl4}/submitTaskForReview/${taskId}`, {});
+    return this.http.put<Task>(`${this.apiUrl4}/submitTaskForReview/${taskId}`, {headers:this.authservice.getHeaders() });
   }
 }

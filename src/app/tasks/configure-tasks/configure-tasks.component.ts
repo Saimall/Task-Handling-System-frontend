@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Task } from '../../models/Task';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from 'express';
 
 @Component({
   selector: 'app-configure-tasks',
@@ -16,8 +17,22 @@ export class ConfigureTasksComponent {
 
 
   taskForm: FormGroup;
-
- 
+  selectedTask: Task = {
+    taskId: '',               
+    taskTitle: '',           
+    taskDescription: '',     
+    status: 'ToDo',          
+    assignedTo: '',          
+    priority: 'LOW',          
+    dueDate: '',              
+    dueDateTime: '',         
+    empId: undefined,         
+    employeeId: '',          
+    createdAt: '',           
+    updatedAt: '',           
+    completedAt: ''           
+  };
+  isUpdateTaskModalOpen = false;
   
   newTask: any = {taskTitle:'',taskDescription:'' ,dueDateTime:'',priority:'',status:'' };
   isAddTaskModalOpen = false;
@@ -48,6 +63,7 @@ export class ConfigureTasksComponent {
     private employeeservice:EmployeeserviceService,
     private fb: FormBuilder,
     private snackbar:MatSnackBar,
+  
    
   ) {
     this.taskForm = this.fb.group({
@@ -106,6 +122,31 @@ export class ConfigureTasksComponent {
   }
 
 
+  openUpdateTaskModel(task:Task){
+
+    this.selectedTask = task;
+
+    const dueDateTime = task.dueDateTime || '';
+
+    this.taskForm.setValue({
+      taskTitle: task.taskTitle,
+      taskDescription: task.taskDescription,
+      dueDate: dueDateTime.split('T')[0] , 
+      dueTime: dueDateTime.split('T')[1], 
+      priority: task.priority,
+      employeeId: task.employeeId
+    });
+    this.isUpdateTaskModalOpen = true;
+  }
+
+
+  closeUpdateTaskModal() {
+    this.isUpdateTaskModalOpen = false;
+    this.taskForm.reset(); 
+  }
+
+
+
   saveNewTask() {
 
     console.log(this.taskForm);
@@ -161,12 +202,39 @@ export class ConfigureTasksComponent {
 
 
 
-  updateTask(task: any) {
-    
-    console.log('Updating task:', task);
+  updateTaskDetails() {
+    if (this.taskForm.valid) {
+      const updatedTask: Task = {
+        taskTitle: this.taskForm.get('taskTitle')?.value,
+        taskDescription: this.taskForm.get('taskDescription')?.value,
+        priority: this.taskForm.get('priority')?.value,
+        employeeId: this.taskForm.get('employeeId')?.value,
+        dueDateTime: `${this.taskForm.get('dueDate')?.value}T${this.taskForm.get('dueTime')?.value}`,
+        status: this.selectedTask.status,
+        taskId: this.selectedTask.taskId,
+      };
+
+ if(this.selectedTask.taskId!=null){
+  
+      this.taskservice.updateTask(this.selectedTask.taskId, updatedTask).subscribe({
+        next: (updatedTask) => {
+          this.snackbar.open('Task updated successfully!', 'Close', { duration: 3000 });
+          this.loadTasks(); 
+          this.closeUpdateTaskModal();
+        },
+        error: (error) => {
+          this.snackbar.open('Failed to update the task.', 'Close', { duration: 3000 });
+          console.error('Error updating task:', error);
+        }
+      });
+    } else {
+      this.taskForm.markAllAsTouched(); // Mark all fields as touched to show validation errors
+    }
   }
+}
 
   deleteTask(taskId: string) {
+    if(taskId!=null){
     this.taskservice.deleteTask(taskId).subscribe({
       next:()=>{
         this.loadTasks()
@@ -187,6 +255,53 @@ export class ConfigureTasksComponent {
       }
     });
   }
+}
+
+
+
+openReviewModal(task: any) {
+  this.selectedTask = task;
+  const modal = document.querySelector('#reviewModal') as HTMLElement;
+  modal.style.display = 'flex';
+}
+
+approveTask(task: any) {
+  this.updateTaskStatus(task.id, 'COMPLETED');
+  this.closeModal();
+}
+
+requestRework(task: any) {
+  this.updateTaskStatus(task.id, 'TODO');
+  this.closeModal();
+}
+
+closeModal() {
+  const modal = document.querySelector('#reviewModal') as HTMLElement;
+  modal.style.display = 'none';
+}
+
+
+
+updateTaskStatus(taskId: number, status: string) {
+  this.taskservice.updateTaskStatus(taskId, status).subscribe({
+    next: (response) => {
+      
+      this.snackbar.open('FeedBack sent Successfully!!', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+    },
+    error: (err) => {
+      
+      this.snackbar.open('Failed to sent the FeedBack!!', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+    }
+  });
+}
 
   getEmployeeTooltip(assignedTo?: string): string {
     const employee = this.employees.find(emp => emp.name === assignedTo);

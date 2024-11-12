@@ -1,9 +1,18 @@
 <div class="min-h-screen bg-gray-100" style="user-select: none; cursor: default;">
-  <header class="bg-white shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-      <div class="flex items-center">
-        <span class="h-15 w-15 text-blue-500 mr-2">📊</span>
-        <h1 class="text-m font-bold text-gray-900" style="user-select: none; cursor: default;">TaskLoop</h1>
+    <header class="bg-white shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center">
+          <span class="h-28 w-28">
+            <img src="assets/TaskLOOP.png" alt="TaskLoop Logo" class="h-full w-full object-contain" />
+          </span>
+          <span>  <h1 class="text-xl font-bold text-gray-900 mt-8" style="user-select: none; cursor: default;">TaskLoop</h1></span>
+        </div>
+        <button
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          (click)="handleLogout()"
+        >
+          Logout
+        </button>
       </div>
       <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (click)="handleLogout()">
         Logout
