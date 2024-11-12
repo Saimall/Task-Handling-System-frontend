@@ -361,8 +361,35 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
 
   markInReview(task: Task): void {
     task.status = 'IN_REVIEW';
-    this.updateTaskStatus(task);
+    this.markTaskInReview(task);
   }
+
+  private markTaskInReview(task: Task): void {
+    let taskid:number =parseInt(task.taskId);
+    this.taskService.submitTaskForReview(taskid)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.snackbar.open(`Task Marked for Review and mail sent to manager`, 'Close', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
+        },
+        error: (error) => {
+          console.error('Error updating task status:', error);
+          this.snackbar.open('Failed to Mark the task as Review', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
+        }
+      });
+  }
+
+
+
+
 
   private updateTaskStatus(task: Task): void {
     let taskid:number =parseInt(task.taskId);
