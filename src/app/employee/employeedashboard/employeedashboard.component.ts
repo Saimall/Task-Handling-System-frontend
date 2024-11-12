@@ -367,7 +367,6 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
   private markTaskInReview(task: Task): void {
     let taskid:number =parseInt(task.taskId);
     this.taskService.submitTaskForReview(taskid)
-      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           this.snackbar.open(`Task Marked for Review and mail sent to manager`, 'Close', {

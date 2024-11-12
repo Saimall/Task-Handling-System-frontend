@@ -291,6 +291,7 @@ updateTaskStatus(taskId: number, status: string) {
         horizontalPosition: 'right',
         verticalPosition: 'top',
       });
+      this.loadTasks()
     },
     error: (err) => {
       
