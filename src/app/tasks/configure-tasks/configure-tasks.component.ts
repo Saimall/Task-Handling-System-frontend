@@ -89,6 +89,8 @@ export class ConfigureTasksComponent {
           console.log("employee name"+ JSON.stringify(assignedEmployee));
           console.log("task deatils",)
           task.assignedTo = assignedEmployee.name; 
+          
+          task.employeeDetails = `ID: ${assignedEmployee.empId}\nName: ${assignedEmployee.name}\nRole: ${assignedEmployee.designation}\nEmail: ${assignedEmployee.email}\nContact: ${assignedEmployee.contact}`;
         }
       });
     });
@@ -185,5 +187,15 @@ export class ConfigureTasksComponent {
       }
     });
   }
+
+  getEmployeeTooltip(assignedTo?: string): string {
+    const employee = this.employees.find(emp => emp.name === assignedTo);
+    return employee 
+      ? `ID: ${employee.empId}\nName: ${employee.name}\nEmail: ${employee.email}\nRole: ${employee.designation}`
+      : 'Employee details not available';
+  }
+
+  
+  
 
 }

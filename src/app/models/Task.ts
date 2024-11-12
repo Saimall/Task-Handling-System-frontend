@@ -12,6 +12,7 @@
 
 
 export interface Task{
+  employeeDetails: string;
 
 
     taskId: string;
@@ -26,4 +27,5 @@ export interface Task{
     createdAt?: string;                   
     updatedAt?: string;                  
     completedAt?: string;  
+    taskDescription: string;
 }

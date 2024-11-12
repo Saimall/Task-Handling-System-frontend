@@ -16,8 +16,10 @@ import { ManagerdashboardComponent } from './managerdashboard/managerdashboard.c
 import { AddProjectComponent } from './add-project/add-project.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { AddEmployeeComponent } from './add-employee/add-employee.component';
+import { PieChartComponent } from './pie-chart/pie-chart.component';
+import { BarChartComponent } from './bar-chart/bar-chart.component';
 @NgModule({
-  declarations: [ManagerRegistrationFormComponent,ManagerdashboardComponent, AddProjectComponent, AddEmployeeComponent],
+  declarations: [ManagerRegistrationFormComponent,ManagerdashboardComponent, AddProjectComponent, AddEmployeeComponent, PieChartComponent, BarChartComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
