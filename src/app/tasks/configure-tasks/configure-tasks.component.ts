@@ -21,7 +21,7 @@ export class ConfigureTasksComponent {
     taskId: '',               
     taskTitle: '',           
     taskDescription: '',     
-    status: 'ToDo',          
+    status: 'TODO',          
     assignedTo: '',          
     priority: 'LOW',          
     dueDate: '',              
@@ -39,6 +39,7 @@ export class ConfigureTasksComponent {
   projectID: any=null 
   managerID: any=null 
   tasks: Task[] = [];
+  reviewmodelopen:boolean=false;
  
   employees: any[] = [];
 
@@ -258,31 +259,32 @@ export class ConfigureTasksComponent {
 
 
 openReviewModal(task: any) {
+  this.reviewmodelopen=true;
   this.selectedTask = task;
-  const modal = document.querySelector('#reviewModal') as HTMLElement;
-  modal.style.display = 'flex';
+ 
 }
 
 approveTask(task: any) {
-  this.updateTaskStatus(task.id, 'COMPLETED');
+  this.updateTaskStatus(task.taskId, 'COMPLETED');
   this.closeModal();
 }
 
 requestRework(task: any) {
-  this.updateTaskStatus(task.id, 'TODO');
+  this.updateTaskStatus(task.taskId, 'TODO');
   this.closeModal();
 }
 
 closeModal() {
-  const modal = document.querySelector('#reviewModal') as HTMLElement;
-  modal.style.display = 'none';
+  this.reviewmodelopen=false;
+ 
+ 
 }
 
 
 
 updateTaskStatus(taskId: number, status: string) {
   this.taskservice.updateTaskStatus(taskId, status).subscribe({
-    next: (response) => {
+    next: () => {
       
       this.snackbar.open('FeedBack sent Successfully!!', 'Close', {
         duration: 3000,
