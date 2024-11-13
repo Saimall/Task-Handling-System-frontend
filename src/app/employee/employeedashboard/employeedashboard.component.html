@@ -10,7 +10,7 @@
           </div>
           <div class="flex items-center gap-4">
             <button
-              class="inline-flex items-center px-5 py-3 border border-transparent text-sm font-medium rounded-lg shadow-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              class="inline-flex items-center px-5 py-3 border border-transparent text-sm font-medium rounded-lg shadow-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" (click)="viewTasks()">
               View Tasks
             </button>
             <button
@@ -164,7 +164,7 @@
 
 
 
-<!-- Modal for Changing Password -->
+<!--Password change model-->
 <div *ngIf="isPasswordModalOpen" class="fixed inset-0 flex items-center justify-center z-10 bg-gray-500 bg-opacity-50">
 <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
   <h3 class="text-lg font-semibold text-gray-900 mb-4">Change Password</h3>
@@ -225,5 +225,59 @@
   </form>
 </div>
 </div>
+
+<!-- View tasks -->
+<div *ngIf="showTasks" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+  <div class="bg-white rounded-lg max-w-4xl w-full mx-auto p-8 shadow-2xl relative transform transition-all duration-300 ease-in-out scale-100 hover:scale-105">
+    <!-- Close Button -->
+    <button (click)="showTasks = false" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 focus:outline-none">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <h2 class="text-3xl font-semibold mb-6 text-center text-gray-800">Your Tasks</h2>
+
+    <div class="max-h-[600px] overflow-y-auto space-y-6">
+      <div *ngFor="let task of tasks" class="border border-gray-300 rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out">
+        <div class="flex justify-between items-start space-x-4">
+          <!-- Task Information Section -->
+          <div class="flex flex-col space-y-4 w-full">
+            <h3 class="text-xl font-semibold text-gray-800">{{ task.taskTitle }}</h3>
+            <p class="text-gray-700 text-base">{{ task.taskDescription }}</p>
+            <div class="flex items-center space-x-4 text-sm text-gray-600">
+              <p><b>Due Date: </b>{{ task.dueDateTime | date: 'MMMM d, yyyy h:mm a' }}</p>
+              <p><b>Status: </b><span [ngClass]="getStatusClass(task.status)">{{ task.status }}</span></p>
+              <p><b>Priority: </b><span [ngClass]="getPriorityClass(task.priority)">{{ task.priority }}</span></p>
+            </div>
+          </div>
+
+          <!-- Action Buttons Section -->
+          <div class="flex flex-col space-y-4 justify-center items-end w-32">
+            <!-- Accept Task Button -->
+            <div *ngIf="task.status === 'TODO'">
+              <button (click)="acceptTask(task)" class="bg-blue-600 text-white hover:bg-blue-700 py-2 px-4 rounded-md transition-all duration-200 ease-in-out transform hover:scale-105" >
+                Accept Task
+              </button>
+            </div>
+            <!-- Mark In Review Button -->
+            <div *ngIf="task.status === 'IN_PROGRESS'">
+              <button (click)="markInReview(task)" class="bg-yellow-500 text-white hover:bg-yellow-600 py-2 px-4 rounded-md transition-all duration-200 ease-in-out transform hover:scale-105">
+                Mark In Review
+              </button>
+            </div>
+            <!-- Completed Status -->
+            <div *ngIf="task.status === 'COMPLETED'">
+              <span class="text-green-500 font-bold text-lg">Completed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 
   

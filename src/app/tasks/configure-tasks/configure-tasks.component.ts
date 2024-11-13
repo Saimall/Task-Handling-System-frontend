@@ -21,7 +21,7 @@ export class ConfigureTasksComponent {
     taskId: '',
     taskTitle: '',
     taskDescription: '',
-    status: 'ToDo',
+    status: 'TODO',
     assignedTo: '',
     priority: 'LOW',
     dueDate: '',
@@ -31,7 +31,7 @@ export class ConfigureTasksComponent {
     createdAt: '',
     updatedAt: '',
     completedAt: '',
-    employeeDetails: ''
+    employeeDetails: ''          
   };
  
   
@@ -40,6 +40,7 @@ export class ConfigureTasksComponent {
   projectID: any=null 
   managerID: any=null 
   tasks: Task[] = [];
+  reviewmodelopen:boolean=false;
  
   employees: any[] = [];
   isUpdateTaskModalOpen: boolean = false;
@@ -143,15 +144,15 @@ openUpdateTaskModel(task:Task){
   });
   this.isUpdateTaskModalOpen = true;
 }
-openReviewModal(task: any) {
-  this.selectedTask = task;
-  const modal = document.querySelector('#reviewModal') as HTMLElement;
-  modal.style.display = 'flex';
-}
-  closeModal() {
-    const modal = document.querySelector('#reviewModal') as HTMLElement;
-    modal.style.display = 'none';
-  }
+// openReviewModal(task: any) {
+//   this.selectedTask = task;
+//   const modal = document.querySelector('#reviewModal') as HTMLElement;
+//   modal.style.display = 'flex';
+// }
+  // closeModal() {
+  //   const modal = document.querySelector('#reviewModal') as HTMLElement;
+  //   modal.style.display = 'none';
+  // }
 
   loadTasks() {
     this.taskservice.getTasksByProjectId(this.projectID).subscribe((data) => {
@@ -174,10 +175,10 @@ openReviewModal(task: any) {
     });
   }
 
-  approveTask(task: any) {
-    this.updateTaskStatus(task.id, 'COMPLETED');
-    this.closeModal();
-  }
+  // approveTask(task: any) {
+  //   this.updateTaskStatus(task.id, 'COMPLETED');
+  //   this.closeModal();
+  // }
 
   closeUpdateTaskModal() {
     this.isUpdateTaskModalOpen = false;
@@ -193,30 +194,30 @@ openReviewModal(task: any) {
     });
   }
 
-  requestRework(task: any) {
-    this.updateTaskStatus(task.id, 'TODO');
-    this.closeModal();
-  }
-  updateTaskStatus(taskId: number, status: string) {
-    this.taskservice.updateTaskStatus(taskId, status).subscribe({
-      next: (response) => {
+  // requestRework(task: any) {
+  //   this.updateTaskStatus(task.id, 'TODO');
+  //   this.closeModal();
+  // }
+  // updateTaskStatus(taskId: number, status: string) {
+  //   this.taskservice.updateTaskStatus(taskId, status).subscribe({
+  //     next: (response) => {
        
-        this.snackbar.open('FeedBack sent Successfully!!', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-        });
-      },
-      error: (err) => {
+  //       this.snackbar.open('FeedBack sent Successfully!!', 'Close', {
+  //         duration: 3000,
+  //         horizontalPosition: 'right',
+  //         verticalPosition: 'top',
+  //       });
+  //     },
+  //     error: (err) => {
        
-        this.snackbar.open('Failed to sent the FeedBack!!', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-        });
-      }
-    });
-  }
+  //       this.snackbar.open('Failed to sent the FeedBack!!', 'Close', {
+  //         duration: 3000,
+  //         horizontalPosition: 'right',
+  //         verticalPosition: 'top',
+  //       });
+  //     }
+  //   });
+  // }
 
 
   saveNewTask() {
@@ -308,7 +309,48 @@ openReviewModal(task: any) {
   //     : 'Employee details not available';
   // }
 
-  
-  
+
+openReviewModal(task: any) {
+  this.reviewmodelopen=true;
+  this.selectedTask = task;
+ 
+}
+
+approveTask(task: any) {
+  this.updateTaskStatus(task.taskId, 'COMPLETED');
+  this.closeModal();
+}
+
+requestRework(task: any) {
+  this.updateTaskStatus(task.taskId, 'TODO');
+  this.closeModal();
+}
+
+closeModal() {
+  this.reviewmodelopen=false;
+}
+
+
+updateTaskStatus(taskId: number, status: string) {
+  this.taskservice.updateTaskStatus(taskId, status).subscribe({
+    next: () => {
+      
+      this.snackbar.open('FeedBack sent Successfully!!', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+      this.loadTasks()
+    },
+    error: (err) => {
+      
+      this.snackbar.open('Failed to sent the FeedBack!!', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+    }
+  });
+}
 
 }

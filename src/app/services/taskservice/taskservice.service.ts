@@ -36,10 +36,10 @@ export class TaskserviceService {
 
   updateTask(taskId: string, taskRequestDto: Task): Observable<Task> {
     return this.http.put<Task>(`${this.apiUrl4}/updateTasks/${taskId}`, taskRequestDto,{headers:this.authservice.getHeaders() });
-  }
+  }   
 
   updateTaskStatus(taskId: number, status: string): Observable<Task> {
-    return this.http.put<Task>(`${this.apiUrl4}/updateTaskStatus/${taskId}/${status}`,{headers:this.authservice.getHeaders() });
+    return this.http.put<Task>(`${this.apiUrl4}/updateTaskStatus/${taskId}/${status}`,null,{headers:this.authservice.getHeaders() });
   }
 
   deleteTask(taskId: string): Observable<void> {
@@ -51,6 +51,7 @@ export class TaskserviceService {
   }
 
   submitTaskForReview(taskId: number): Observable<Task> {
-    return this.http.put<Task>(`${this.apiUrl4}/submitTaskForReview/${taskId}`, {headers:this.authservice.getHeaders() });
+    console.log("taskId"+taskId);
+    return this.http.put<Task>(`${this.apiUrl4}/submitTaskForReview/${taskId}`,null, {headers:this.authservice.getHeaders() });
   }
 }

@@ -8,6 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../services/authenticationservice/authenticationservice.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Task } from '../../models/Task';
 
 Chart.register(...registerables);
 
@@ -25,6 +26,8 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
   public empId: string | undefined;
   employeeDetails: any = {};
   isEditing: boolean = false;
+  tasks!: Task[];
+
 
   taskData: ChartData<'doughnut'> = {
     labels: ['Completed', 'ToDo', 'In Progress', 'In Review', 'Overdue'],
@@ -38,6 +41,7 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
 
   passwordForm: FormGroup;  // Moved this out of constructor and initialized here
   isPasswordModalOpen: boolean = false;
+  showTasks: boolean=false;
 
   toggleEditProfile(): void {
     this.isEditing = !this.isEditing;
@@ -145,6 +149,7 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (tasks) => {
+          this.tasks=tasks;
           this.processTaskData(tasks);
           this.updateCharts();
         },
@@ -256,15 +261,15 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
             verticalPosition: 'top',
           });
 
-          // Close the modal
+     
           this.closePasswordModal();
 
-          // Remove the token after changing the password (if applicable)
+          
           this.authService.removeToken();
           this.router.navigate(['/login']);
         },
         error: (error) => {
-          // Handle different errors
+         
           if (error.status === 400) {
             this.snackbar.open('Incorrect current password. Please try again.', 'Close', {
               duration: 3000,
@@ -313,4 +318,100 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
     });
   }
 
+
+  getPriorityClass(priority: string): string {
+    switch (priority) {
+      case 'HIGH':
+        return 'text-red-500 font-semibold';
+      case 'MEDIUM':
+        return 'text-yellow-500 font-semibold';
+      case 'LOW':
+        return 'text-green-500 font-semibold';
+      default:
+        return 'text-gray-600';
+    }
+  }
+
+  getStatusClass(status: string): string {
+    switch (status) {
+      case 'COMPLETED':
+        return 'text-green-600';
+      case 'ToDo':
+        return 'text-blue-600';
+      case 'IN_PROGRESS':
+        return 'text-yellow-600';
+      case 'IN_REVIEW':
+        return 'text-purple-600';
+      case 'OVERDUE':
+        return 'text-red-600';
+      default:
+        return 'text-gray-600';
+    }
+  }
+
+  viewTasks(): void {
+    this.showTasks = true; 
+    this.fetchTasks(this.empId!);
+  }
+
+  acceptTask(task: Task): void {
+    task.status = 'IN_PROGRESS';
+    this.updateTaskStatus(task);
+  }
+
+  markInReview(task: Task): void {
+    task.status = 'IN_REVIEW';
+    this.markTaskInReview(task);
+  }
+
+  private markTaskInReview(task: Task): void {
+    let taskid:number =parseInt(task.taskId);
+    this.taskService.submitTaskForReview(taskid)
+      .subscribe({
+        next: () => {
+          this.snackbar.open(`Task Marked for Review and mail sent to manager`, 'Close', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
+        },
+        error: (error) => {
+          console.error('Error updating task status:', error);
+          this.snackbar.open('Failed to Mark the task as Review', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
+        }
+      });
+  }
+
+
+
+
+
+  private updateTaskStatus(task: Task): void {
+    let taskid:number =parseInt(task.taskId);
+    this.taskService.updateTaskStatus(taskid, task.status)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.snackbar.open(`Task status updated to ${task.status}`, 'Close', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
+        },
+        error: (error) => {
+          console.error('Error updating task status:', error);
+          this.snackbar.open('Failed to update task status', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
+        }
+      });
+  }
+
 }
+

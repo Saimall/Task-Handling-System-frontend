@@ -1,4 +1,4 @@
-<div class="flex justify-center items-start min-h-screen bg-gray-100 pt-10">
+<div class="flex justify-center items-start min-h-screen bg-gray-100 pt-10" style="user-select: none; cursor: default;">
   <div class="w-full max-w-[1200px] p-6 rounded-lg shadow-lg bg-white" style="user-select: none; cursor: default;">
     <h2 class="text-2xl font-semibold mb-6 text-center">Task Configuration</h2>
     <div class="flex justify-end mb-3">
@@ -46,10 +46,10 @@
              
               <span class="block w-4 h-4 rounded-full animate-pulse"
                 [ngStyle]="{
-                  background: task.status === 'Completed' ? '#22c55e' :
-                              task.status === 'In_Progress' ? '#f39c12' :
-                              task.status === 'In_Review' ? '#1e40af' :
-                              task.status === 'Overdue' ? '#ef4444' :
+                  background: task.status === 'COMPLETED' ? '#22c55e' :
+                              task.status === 'IN_PROGRESS' ? '#f39c12' :
+                              task.status === 'IN_REVIEW' ? '#1e40af' :
+                              task.status === 'OVERDUE' ? '#ef4444' :
                               '#2a3439' 
                 }">
               </span>
@@ -74,7 +74,7 @@
           <td class="py-3 px-4 flex items-center space-x-2">
 
             <button
-  *ngIf="task.status === 'In_Review'"
+  *ngIf="task.status === 'IN_REVIEW'"
   (click)="openReviewModal(task)"
   class="bg-blue-500 hover:bg-blue-700 text-white rounded-full p-3 transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
 >
@@ -236,7 +236,7 @@
 </div>
 
 
-<ng-template #reviewModal>
+<div *ngIf="reviewmodelopen">
   <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
     <div class="bg-white rounded-lg p-6 w-full max-w-sm shadow-lg text-center">
       <h3 class="text-lg font-semibold mb-4 text-gray-800">Review Task</h3>
@@ -262,5 +262,5 @@
       </div>
     </div>
   </div>
-</ng-template>
+</div>
 

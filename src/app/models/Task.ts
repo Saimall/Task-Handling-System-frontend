@@ -17,7 +17,7 @@ export interface Task {
   taskId: string;
   taskTitle: string;
   taskDescription: string;
-  status: 'ToDo' | 'In_Progress' | 'In_Review' | 'Completed' | 'Overdue';  
+  status: 'TODO' | 'IN_PROGRESS' | 'IN_REVIEW' | 'COMPLETED' | 'OVERDUE';  
   assignedTo?: string; 
   dueDate?: string; 
   priority: 'LOW' | 'MEDIUM' | 'HIGH';
