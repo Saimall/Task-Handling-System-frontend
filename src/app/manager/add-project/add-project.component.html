@@ -5,18 +5,30 @@
         <div class="mb-4">
           <label class="block text-sm font-medium">Project Name</label>
           <input type="text" formControlName="projectName" class="mt-1 p-2 border rounded w-full" />
+          <div *ngIf="projectForm.get('projectName')?.invalid && projectForm.get('projectName')?.touched" class="text-red-500 text-sm">
+            ProjectName is required.
+          </div>
         </div>
         <div class="mb-4">
           <label class="block text-sm font-medium">Start Date</label>
           <input type="date" formControlName="startDate" class="mt-1 p-2 border rounded w-full" />
+          <div *ngIf="projectForm.get('startDate')?.invalid && projectForm.get('startDate')?.touched" class="text-red-500 text-sm">
+            StartDate is required.
+          </div>
         </div>
         <div class="mb-4">
           <label class="block text-sm font-medium">End Date</label>
           <input type="date" formControlName="endDate" class="mt-1 p-2 border rounded w-full" />
+          <div *ngIf="projectForm.get('endDate')?.invalid && projectForm.get('endDate')?.touched" class="text-red-500 text-sm">
+            EndDate is required.
+          </div>
         </div>
         <div class="mb-4">
           <label class="block text-sm font-medium">Project Description</label>
           <textarea formControlName="projectDescription" class="mt-1 p-2 border rounded w-full"></textarea>
+          <div *ngIf="projectForm.get('projectDescription')?.invalid && projectForm.get('projectDescription')?.touched" class="text-red-500 text-sm">
+            projectDescription is required.
+          </div>
         </div>
         <div class="flex justify-end">
           <button type="button" class="mr-2 bg-gray-400 text-white px-4 py-2 rounded" (click)="onClose()">Cancel</button>
