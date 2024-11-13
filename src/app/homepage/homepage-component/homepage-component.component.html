@@ -1,15 +1,20 @@
 <div class="min-h-screen flex flex-col" style="user-select: none; cursor: default">
     <!-- Header -->
     <mat-toolbar color="primary" class="header">
-      <div class="toolbar-content">
-        <mat-icon>loop</mat-icon>
-        <h1>TaskLoop</h1>
-        <div class="actions">
+      <div class="toolbar-content flex items-center justify-between w-full">
+        <div class="flex items-center space-x-4">
+          <span class="h-16 w-auto">
+            <img src="assets/TaskLOOP.png" alt="TaskLoop Logo" class="h-full w-auto object-contain" />
+          </span>
+          <h1>TaskLOOP</h1>
+        </div>
+        <div class="actions flex space-x-2">
           <button mat-raised-button color="accent" (click)="navigateTo('/register')">Register</button>
           <button mat-raised-button color="accent" (click)="navigateTo('/login')">Login</button>
         </div>
       </div>
     </mat-toolbar>
+    
   
     <!-- Main Content -->
     <main class="main-content">

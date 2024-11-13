@@ -12,6 +12,8 @@
 
 
 export interface Task {
+  employeeDetails: string;
+ 
   taskId: string;
   taskTitle: string;
   taskDescription: string;
