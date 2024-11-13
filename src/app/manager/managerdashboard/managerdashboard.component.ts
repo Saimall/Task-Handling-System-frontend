@@ -84,7 +84,7 @@ export class ManagerdashboardComponent implements OnInit {
       next: () => {
         this.closeEmployeePopup();
         this.loadEmployee();
-        this.snackbar.open('Employee Added Successfully', 'Close', {
+        this.snackbar.open('Employee Added Successfully and mail sent to the employee', 'Close', {
           duration: 3000,
           horizontalPosition: 'right',
           verticalPosition: 'top',
@@ -92,7 +92,7 @@ export class ManagerdashboardComponent implements OnInit {
       },
       error: () => {
         console.error('Error adding employee:');
-        this.snackbar.open('Error while adding the Employee', 'Close', {
+        this.snackbar.open('Error while adding the Employee or Employee already exists', 'Close', {
           duration: 3000,
           horizontalPosition: 'right',
           verticalPosition: 'top',
