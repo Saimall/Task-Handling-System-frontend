@@ -55,6 +55,7 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
   priorityData: ChartData<'bar'> = {
     labels: ['Low', 'Medium', 'High'],
     datasets: [{
+      label: 'Priority status',
       data: [0, 0, 0],
       backgroundColor: ['#10B981', '#F59E0B', '#EF4444']
     }]
