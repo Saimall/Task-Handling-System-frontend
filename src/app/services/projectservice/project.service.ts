@@ -8,6 +8,7 @@ import { AuthService } from '../authenticationservice/authenticationservice.serv
   providedIn: 'root'
 })
 export class ProjectService {
+
  
 
   constructor(private http: HttpClient,private authservice:AuthService ){}
@@ -28,4 +29,13 @@ export class ProjectService {
   deleteProject(projectid:any): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl1}/deleteProjects/${projectid}`,{headers:this.authservice.getHeaders()});
   }
+
+
+  getProjectById(projectID: any):Observable<Project> {
+    console.log("projectID inside getprojectID"+projectID);
+    return this.http.get<Project>(`${this.apiUrl1}/getProject/${projectID}`,{headers:this.authservice.getHeaders()});
+  }
+
+
+
 }

@@ -7,6 +7,8 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Task } from '../../models/Task';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ProjectService } from '../../services/projectservice/project.service';
+import { Project } from '../../models/project';
 
 @Component({
   selector: 'app-configure-tasks',
@@ -41,6 +43,7 @@ export class ConfigureTasksComponent {
   managerID: any=null 
   tasks: Task[] = [];
   reviewmodelopen:boolean=false;
+  project?:Project
  
   employees: any[] = [];
   isUpdateTaskModalOpen: boolean = false;
@@ -66,6 +69,7 @@ export class ConfigureTasksComponent {
     private employeeservice:EmployeeserviceService,
     private fb: FormBuilder,
     private snackbar:MatSnackBar,
+    private projectservice:ProjectService,
    
   ) {
     this.taskForm = this.fb.group({
@@ -89,6 +93,7 @@ export class ConfigureTasksComponent {
 
       if (this.managerID && this.projectID) {
         this.loadEmployees();
+        this.getprojectdata();
        
         
       }
@@ -97,6 +102,30 @@ export class ConfigureTasksComponent {
 
   updateTaskDetails() {
     if (this.taskForm.valid) {
+
+      const selectedDate = this.taskForm.get('dueDate')?.value;
+    const selectedTime = this.taskForm.get('dueTime')?.value;
+    const projectStartDate = this.project?.startDate ? new Date(this.project.startDate) : null;
+    const projectEndDate = this.project?.endDate ? new Date(this.project.endDate) : null;
+    
+  
+    const selectedDateOnly = new Date(selectedDate);
+    const projectStartDateOnly = projectStartDate ? new Date(projectStartDate.toDateString()) : null;
+    const projectEndDateOnly = projectEndDate ? new Date(projectEndDate.toDateString()) : null;
+    
+    if (selectedDate && projectStartDateOnly && projectEndDateOnly && 
+        (selectedDateOnly < projectStartDateOnly || selectedDateOnly > projectEndDateOnly)) {
+      this.snackbar.open('Selected Date is not in the Project Date Range', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+      return;
+    }
+
+
+
+
       const updatedTask: Task = {
         taskTitle: this.taskForm.get('taskTitle')?.value,
         taskDescription: this.taskForm.get('taskDescription')?.value,
@@ -107,12 +136,14 @@ export class ConfigureTasksComponent {
         taskId: this.selectedTask.taskId,
         employeeDetails: ''
       };
+
  
  if(this.selectedTask.taskId!=null){
  
       this.taskservice.updateTask(this.selectedTask.taskId, updatedTask).subscribe({
         next: (updatedTask) => {
-          this.snackbar.open('Task updated successfully!', 'Close', { duration: 3000 });
+          this.snackbar.open('Task updated successfully!', 'Close', { duration: 3000, horizontalPosition: 'right',
+            verticalPosition: 'top' });
           this.loadTasks();
           this.closeUpdateTaskModal();
         },
@@ -220,6 +251,24 @@ openUpdateTaskModel(task:Task){
   // }
 
 
+  getprojectdata() {
+    console.log('Fetching project data for ID:', this.projectID); // Add this debug log
+    
+    this.projectservice.getProjectById(this.projectID).subscribe({
+      next: (data) => {
+        this.project = data;
+        console.log("Project data received:", this.project);
+      },
+      error: (error) => {
+        console.error("Error fetching project data:", error);
+        this.snackbar.open('Failed to load project data', 'Close', {
+          duration: 3000
+        });
+      }
+    });
+  }
+
+
   saveNewTask() {
 
     console.log(this.taskForm);
@@ -228,7 +277,24 @@ openUpdateTaskModel(task:Task){
 
       const selectedDate = this.taskForm.get('dueDate')?.value;
       const selectedTime = this.taskForm.get('dueTime')?.value;
+      const projectStartDate = this.project?.startDate ? new Date(this.project.startDate) : null;
+      const projectEndDate = this.project?.endDate ? new Date(this.project.endDate) : null;
+      const selectedDateOnly = new Date(selectedDate);
+      const projectStartDateOnly = projectStartDate ? new Date(projectStartDate.toDateString()) : null;
+      const projectEndDateOnly = projectEndDate ? new Date(projectEndDate.toDateString()) : null;
       
+      
+      if (selectedDate && projectStartDateOnly && projectEndDateOnly && 
+        (selectedDateOnly < projectStartDateOnly || selectedDateOnly > projectEndDateOnly)) {
+      this.snackbar.open('Selected Date is not in the Project Date Range', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+      return;
+    }
+
+
       if (selectedDate && selectedTime) {
         const dateTimeString = `${selectedDate}T${selectedTime}`;
          
@@ -283,8 +349,12 @@ openUpdateTaskModel(task:Task){
   deleteTask(taskId: string) {
     this.taskservice.deleteTask(taskId).subscribe({
       next:()=>{
-        this.loadTasks()
-        
+        if (this.tasks.length > 1) { 
+          this.loadTasks();
+        } else if (this.tasks.length === 1) { 
+          this.tasks = [];
+        }
+      
       this.snackbar.open('Task Deleted Successfully!!', 'Close', {
         duration: 3000,
         horizontalPosition: 'right',

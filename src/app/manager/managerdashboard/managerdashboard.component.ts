@@ -168,7 +168,12 @@ export class ManagerdashboardComponent implements OnInit {
   handleDeleteProject(projectid: any) {
     this.projectservice.deleteProject(projectid).subscribe({
       next: () => {
+        if(this.projectData.length>1){
         this.loadProjects();
+        }
+        else{
+          this.projectData = [];
+        }
         this.snackbar.open('Project Deleted Successfully', 'Close', {
           duration: 3000,
           horizontalPosition: 'right',
@@ -478,6 +483,9 @@ export class ManagerdashboardComponent implements OnInit {
 
       if (this.selectedProject) {
         this.loadTasks(this.selectedProject.projectId);
+      }
+      else{
+        this.tasks = [];
       }
     }
   }
