@@ -280,13 +280,17 @@ openUpdateTaskModel(task:Task){
       const projectStartDate = this.project?.startDate ? new Date(this.project.startDate) : null;
       const projectEndDate = this.project?.endDate ? new Date(this.project.endDate) : null;
       const selectedDateOnly = new Date(selectedDate);
-      const projectStartDateOnly = projectStartDate ? new Date(projectStartDate.toDateString()) : null;
+      const today = new Date();
       const projectEndDateOnly = projectEndDate ? new Date(projectEndDate.toDateString()) : null;
       
       
-      if (selectedDate && projectStartDateOnly && projectEndDateOnly && 
-        (selectedDateOnly < projectStartDateOnly || selectedDateOnly > projectEndDateOnly)) {
-      this.snackbar.open('Selected Date is not in the Project Date Range', 'Close', {
+      if (selectedDate && today && projectEndDateOnly && 
+        (selectedDateOnly < today || selectedDateOnly > projectEndDateOnly) ) {
+      console.log(selectedDate);
+      console.log(selectedDateOnly, "today: ", new Date());
+      
+      
+        this.snackbar.open('Selected Date is not in the Project Date Range', 'Close', {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'top',
