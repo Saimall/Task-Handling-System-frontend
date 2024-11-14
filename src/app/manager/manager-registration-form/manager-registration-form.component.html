@@ -2,13 +2,31 @@
     <div class="w-full max-w-9xl bg-white shadow-lg rounded-lg border border-gray-600 ">
         <header class="bg-gray-900 shadow-lg rounded-t-lg">
             <div class="px-10 py-4 flex justify-between items-center">
-                <h1 class="text-5xl font-title font-bold text-white shadow-lg " style="user-select: none; cursor: default;" >TaskFlow</h1>
+                <div class="flex items-center justify-center gap-4">
+                    <span class="h-16 w-auto">
+                      <img src="assets/TaskLOOP.png" alt="TaskLoop Logo" class="h-full w-auto object-contain" />
+                    </span>
+                    <span class="text-3xl font-bold text-white font-title">TaskLOOP</span>
+                  </div>
+                <!-- <h1 class="text-5xl font-title font-bold text-white shadow-lg " style="user-select: none; cursor: default;" >TaskLOOP</h1> -->
                 <div class="flex space-x-4">
                     <button class="bg-gold-500 text-black py-2 px-5 rounded-full hover:bg-gold-400 hover:shadow-lg transition duration-200" (click)="router.navigate(['/Login'])">Login</button>
                     <button class="bg-white text-gray-800 border border-gray-600 py-2 px-5 rounded-full hover:bg-gray-200 hover:shadow-md transition duration-200" (click)="router.navigate([''])">Go Back</button>
                 </div>
             </div>
         </header>
+        <!-- <header class="bg-gray-800 shadow-md">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+              <div class="flex items-center justify-between h-16">
+                <div class="flex items-center justify-center gap-4">
+                  <span class="h-16 w-auto">
+                    <img src="assets/TaskLOOP.png" alt="TaskLoop Logo" class="h-full w-auto object-contain" />
+                  </span>
+                  <span class="text-3xl font-bold text-white font-title">TaskLOOP</span>
+                </div>
+              </div>
+            </div>
+          </header> -->
 
         <main class="flex-grow flex flex-col items-center p-4">
             <div class="mb-4 w-full max-w-xl">
