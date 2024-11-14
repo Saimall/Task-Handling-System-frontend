@@ -340,7 +340,6 @@ export class ManagerdashboardComponent implements OnInit {
               incompleteProjects++;
               return [];
             }
-
             allTasksCompleted = projectTasks.every(task => task.status === 'COMPLETED');
 
             if (!(started > 0 || yetToStart > 0) || this.projectData.length != 1)
