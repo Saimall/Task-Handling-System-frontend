@@ -27,7 +27,7 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
   employeeDetails: any = {};
   isEditing: boolean = false;
   tasks!: Task[];
-  noTasksMessage:string='';
+  noTasksMessage:string='No task assigned';
 
 
   taskData: ChartData<'doughnut'> = {
@@ -43,6 +43,7 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
   passwordForm: FormGroup;  // Moved this out of constructor and initialized here
   isPasswordModalOpen: boolean = false;
   showTasks: boolean=false;
+  toggleChart: boolean=false;
 
   toggleEditProfile(): void {
     this.isEditing = !this.isEditing;
@@ -154,10 +155,10 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
           this.tasks=tasks;
           this.processTaskData(tasks);
           this.updateCharts();
-          this.noTasksMessage='';
+          // this.toggleChart= true;
         },
         error: (error) => {
-          this.noTasksMessage='No task assigned'
+          // this.toggleChart = false;
           console.error('Error fetching tasks:', error);
         }
       });
