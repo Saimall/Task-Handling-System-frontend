@@ -320,6 +320,10 @@ export class ManagerdashboardComponent implements OnInit {
     let yetToStart = 0;
     let completedProjects = 0;
     let incompleteProjects = 0;
+    const chartLabels = ['Started', 'Yet to Start', 'Completed', 'Overdue'];
+    const chartColors = ['#ff6384', '#36a2eb', '#4bc0c0', 'red'];
+    let chartData;
+
 
     const projectTasksObservables = this.projectData.map((project: any) => {
       const startDate = new Date(project.startDate);
@@ -327,33 +331,36 @@ export class ManagerdashboardComponent implements OnInit {
       console.log("projects lenght", this.projectData.length);
 
       if (startDate <= today && endDate >= today) {
+        console.log("started"); 
         started++;
       } else if (startDate > today) {
+        console.log("yet to start");
         yetToStart++;
-      } if ((endDate < today) || (this.projectData.length == 1)) {
+      }
 
         return this.taskservice.getTasksByProjectId(project.projectId).pipe(
           map((projectTasks: any[] | null) => {
             console.log("Tasks for project ID:", project.projectId, projectTasks);
 
             if (!projectTasks || projectTasks.length === 0) {
-              incompleteProjects++;
+              if (!(started > 0 || yetToStart > 0))
+                incompleteProjects++;
               return [];
             }
             allTasksCompleted = projectTasks.every(task => task.status === 'COMPLETED');
 
-            if (!(started > 0 || yetToStart > 0) || this.projectData.length != 1)
+            if (!(started > 0 || yetToStart > 0) || this.projectData.length < 1 || (endDate < today) )
               allTasksCompleted ? completedProjects++ : incompleteProjects++;
             return projectTasks;
           }),
           catchError(error => {
             console.error("Error fetching tasks for project ID:", project.projectId, error);
-            if (!(started > 0 || yetToStart > 0) || this.projectData.length != 1)
+            if (!(started > 0 || yetToStart > 0) || this.projectData.length < 1 || (endDate < today))
               allTasksCompleted ? completedProjects++ : incompleteProjects++;
             return of([]);
           })
         );
-      }
+      
       console.log("before filter");
       return null;
     }).filter(observable => observable !== null);
@@ -362,10 +369,8 @@ export class ManagerdashboardComponent implements OnInit {
       if (this.projectData.length === 1) {
         console.log("im in forkjoin", started, yetToStart, completedProjects, incompleteProjects);
       }
-      const chartLabels = ['Started', 'Yet to Start', 'Completed', 'Overdue'];
-      const chartData = [started, yetToStart, completedProjects, incompleteProjects];
-      const chartColors = ['#ff6384', '#36a2eb', '#4bc0c0', 'red'];
-
+      chartData = [started, yetToStart, completedProjects, incompleteProjects];
+   
       this.pieData = {
         labels: chartLabels,
         datasets: [{
@@ -386,7 +391,7 @@ export class ManagerdashboardComponent implements OnInit {
           }
         }
       };
-
+      console.log(chartData);
       this.barData = {
         labels: chartLabels,
         datasets: [{
@@ -423,7 +428,8 @@ export class ManagerdashboardComponent implements OnInit {
             beginAtZero: true
           }
         }
-      };
+      }; 
+         
     });
   }
 
