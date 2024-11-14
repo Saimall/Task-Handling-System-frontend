@@ -27,6 +27,7 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
   employeeDetails: any = {};
   isEditing: boolean = false;
   tasks!: Task[];
+  noTasksMessage:string='';
 
 
   taskData: ChartData<'doughnut'> = {
@@ -153,8 +154,10 @@ export class EmployeedashboardComponent implements OnInit, OnDestroy, AfterViewI
           this.tasks=tasks;
           this.processTaskData(tasks);
           this.updateCharts();
+          this.noTasksMessage='';
         },
         error: (error) => {
+          this.noTasksMessage='No task assigned'
           console.error('Error fetching tasks:', error);
         }
       });

@@ -132,7 +132,8 @@
                 <h3 class="text-xl md:text-2xl font-semibold text-neutral-900 mb-4 md:mb-6 text-center">
                   Task Distribution
                 </h3>
-                <div class="flex items-center justify-center w-full h-full max-w-4xl ">
+                <div *ngIf="noTasksMessage" class="no-tasks-message">{{ noTasksMessage }}</div>
+                <div [hidden]="noTasksMessage" class="flex items-center justify-center w-full h-full max-w-4xl ">
                   <canvas #doughnutChartCanvas class="h-[50%] p-5"></canvas>
                 </div>
               </div>
