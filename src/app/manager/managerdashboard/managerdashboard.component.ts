@@ -39,6 +39,10 @@ export class ManagerdashboardComponent implements OnInit {
   showUpdateEmployeePopup: boolean = false;
   employeeid: any
   noTasksMessage: string = '';
+  sortType: 'project' | 'employee' = 'project';
+  sortColumn: string = ''; // Column to sort by
+  sortAscending: boolean = true; // Sort direction
+
 
   constructor(
     private router: Router,
@@ -79,6 +83,30 @@ export class ManagerdashboardComponent implements OnInit {
     this.showUpdateEmployeePopup = false;
   }
 
+  sortItems(type: 'project' | 'employee', column: string): void {
+    if (this.sortType === type && this.sortColumn === column) {
+      // Toggle the sorting direction
+      this.sortAscending = !this.sortAscending;
+    } else {
+      // Sort by a new column
+      this.sortType = type;
+      this.sortColumn = column;
+      this.sortAscending = true;
+    }
+  
+    // Sort the appropriate array
+    const dataArray = type === 'project' ? this.projectData : this.employeeData;
+    dataArray.sort((a, b) => {
+      if (a[column] < b[column]) {
+        return this.sortAscending ? -1 : 1;
+      } else if (a[column] > b[column]) {
+        return this.sortAscending ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+  
+  
   onAddEmployee(employee: any) {
     this.employeeService.addEmployee(employee, this.managerId).subscribe({
       next: () => {
