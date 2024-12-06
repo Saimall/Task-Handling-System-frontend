@@ -37,5 +37,9 @@ export class ProjectService {
   }
 
 
+  updateProject(projectId: any, updatedProject: Project): Observable<Project> {
+    return this.http.put<Project>(`${this.apiUrl1}/updateProjects/${projectId}`, updatedProject, {headers:this.authservice.getHeaders()});
+  }
+  
 
 }
